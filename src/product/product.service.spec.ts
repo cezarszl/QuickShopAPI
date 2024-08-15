@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProductService } from './product.service';
 import { PrismaService } from '../prisma.service';
-
 describe('ProductService', () => {
   let service: ProductService;
   let prisma: PrismaService;
@@ -62,7 +61,7 @@ describe('ProductService', () => {
 
   describe('create', () => {
     it('should create and return a new product', async () => {
-      const newProduct = { name: 'New Product', description: 'New Description', price: 299.99 };
+      const newProduct = { name: 'New Product', description: 'New Description', imageUrl: 'url', price: 299.99 };
       const result = await service.create(newProduct);
       expect(result).toEqual({
         id: 3, name: 'New Product', description: 'New Description', price: 299.99
