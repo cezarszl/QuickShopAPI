@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from './prisma.service';
 import { Product } from '@prisma/client';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class ProductService {
         description: string;
         imageUrl: string;
         price: number;
-        ownerId?: number; // Optional owner ID
+        ownerId?: number;
     }): Promise<Product> {
         return this.prisma.product.create({
             data,
