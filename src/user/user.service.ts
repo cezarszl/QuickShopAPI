@@ -11,13 +11,21 @@ export class UserService {
         password: string;
         name: string;
     }): Promise<User> {
+        return this.prisma.user.create({
+            data,
+        });
     }
 
-    async findUserById(id: number): Promise<User> {
+    async findUserById(id: number): Promise<User | null> {
+        return this.prisma.user.findUnique({
+            where: { id },
+        });
     }
 
     async deleteUser(id: number): Promise<User> {
-    }
+        return this.prisma.user.delete({
+            where: { id },
+        }
 
 }
 
