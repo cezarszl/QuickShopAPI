@@ -29,7 +29,7 @@ export class UserController {
     }
 
     @ApiOperation({ summary: 'Delete a user by ID' })
-    @ApiResponse({ status: 200, description: 'The user has been successfully deleted.', type: UserDto })
+    @ApiResponse({ status: 204, description: 'The user has been successfully deleted.' })
     @ApiResponse({ status: 404, description: 'User not found.' })
     @ApiParam({ name: 'id', description: 'User ID' })
     @Delete(':id')

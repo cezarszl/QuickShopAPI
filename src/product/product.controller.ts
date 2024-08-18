@@ -52,7 +52,7 @@ export class ProductController {
 
     @ApiOperation({ summary: 'Delete a product by ID' })
     @ApiParam({ name: 'id', description: 'Unique identifier of the product to delete', type: Number })
-    @ApiResponse({ status: 200, description: 'The product has been successfully deleted.', type: ProductDto })
+    @ApiResponse({ status: 204, description: 'The product has been successfully deleted.' })
     @ApiResponse({ status: 404, description: 'Product not found' })
     @Delete(':id')
     async delete(@Param('id') id: number): Promise<Product> {
