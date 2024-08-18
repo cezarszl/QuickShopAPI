@@ -27,11 +27,11 @@ export class UserService {
 
     async deleteUser(id: number): Promise<User> {
         try {
-            return this.prisma.user.delete({
+            return await this.prisma.user.delete({
                 where: { id },
             })
         } catch (error) {
-            throw new NotFoundException(`User not found`);
+            throw new NotFoundException(`User with ID ${id} not found`);
         };
     }
 }

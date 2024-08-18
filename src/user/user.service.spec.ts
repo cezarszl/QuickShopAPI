@@ -69,7 +69,7 @@ describe('UserService', () => {
 
     it('should handle user not found', async () => {
       (prisma.user.delete as jest.Mock).mockRejectedValue(new Error('User not found'));
-      await expect(service.deleteUser(999)).rejects.toThrow('User not found');
+      await expect(service.deleteUser(999)).rejects.toThrow('User with ID 999 not found');
     });
   });
 });
