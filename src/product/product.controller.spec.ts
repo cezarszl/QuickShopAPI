@@ -1,8 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProductController } from './product.controller';
 import { ProductService } from './product.service';
-import { Product } from '@prisma/client';
-import { NotFoundException } from '@nestjs/common';
 
 describe('ProductController', () => {
   let controller: ProductController;
@@ -17,7 +15,9 @@ describe('ProductController', () => {
     update: jest.fn().mockResolvedValue({ id: 1, name: 'Updated Product', description: 'Updated Description', imageUrl: 'url1', price: 109.99 }),
     delete: jest.fn().mockResolvedValue({ id: 1, name: 'Product 1', description: 'Description 1', imageUrl: 'url1', price: 99.99 }),
   };
-
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  }
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ProductController],

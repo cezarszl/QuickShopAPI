@@ -31,9 +31,9 @@ export class ProductService {
         });
     }
 
-    async delete(id: number): Promise<Product> {
+    async delete(id: number): Promise<void> {
         try {
-            return await this.prisma.product.delete({
+            await this.prisma.product.delete({
                 where: { id },
             });
         } catch (error) {

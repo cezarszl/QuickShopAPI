@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, ParseIntPipe, HttpCode } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Product } from '@prisma/client';
 import { ApiTags, ApiBody, ApiParam, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -18,13 +18,13 @@ export class ProductController {
         return this.productService.findAll();
     }
 
-    // Endpoint: GET /products/:id
+
     @ApiOperation({ summary: 'Retrieve a product by ID' })
     @ApiParam({ name: 'id', description: 'Unique identifier of the product', type: Number })
     @ApiResponse({ status: 200, description: 'Product details', type: ProductDto })
     @ApiResponse({ status: 404, description: 'Product not found' })
     @Get(':id')
-    async findOne(@Param('id') id: number): Promise<Product> {
+    async findOne(@Param('id', ParseIntPipe) id: number): Promise<Product> {
         return await this.productService.findOne(id);
     }
 
@@ -44,7 +44,7 @@ export class ProductController {
     @ApiResponse({ status: 404, description: 'Product not found' })
     @Put(':id')
     async update(
-        @Param('id') id: number,
+        @Param('id', ParseIntPipe) id: number,
         @Body() updateProductDto: { name?: string; description?: string; imageUrl?: string; price?: number },
     ): Promise<Product> {
         return await this.productService.update(id, updateProductDto);
@@ -54,8 +54,9 @@ export class ProductController {
     @ApiParam({ name: 'id', description: 'Unique identifier of the product to delete', type: Number })
     @ApiResponse({ status: 204, description: 'The product has been successfully deleted.' })
     @ApiResponse({ status: 404, description: 'Product not found' })
+    @HttpCode(204)
     @Delete(':id')
-    async delete(@Param('id') id: number): Promise<Product> {
-        return await this.productService.delete(id);
+    async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
+        await this.productService.delete(id);
     }
 }
