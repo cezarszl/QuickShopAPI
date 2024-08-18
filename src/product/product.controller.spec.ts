@@ -51,9 +51,10 @@ describe('ProductController', () => {
       });
     });
 
-    it('should throw NotFoundException if product not found', async () => {
+    it('should return null if product not found', async () => {
       jest.spyOn(service, 'findOne').mockResolvedValue(null);
-      await expect(controller.findOne(999)).rejects.toThrow(NotFoundException);
+      const result = await controller.findOne(999);
+      expect(result).toBeNull();
     });
   });
 
@@ -76,9 +77,10 @@ describe('ProductController', () => {
       });
     });
 
-    it('should throw NotFoundException if product not found', async () => {
+    it('should return null if product not found during update', async () => {
       jest.spyOn(service, 'update').mockResolvedValue(null);
-      await expect(controller.update(999, {})).rejects.toThrow(NotFoundException);
+      const result = await controller.update(999, {});
+      expect(result).toBeNull();
     });
   });
 
@@ -88,9 +90,10 @@ describe('ProductController', () => {
       expect(service.delete).toHaveBeenCalledWith(1);
     });
 
-    it('should throw NotFoundException if product not found', async () => {
+    it('should return null if product not found during delete', async () => {
       jest.spyOn(service, 'delete').mockResolvedValue(null);
-      await expect(controller.delete(999)).rejects.toThrow(NotFoundException);
+      const result = await controller.delete(999);
+      expect(result).toBeNull();
     });
   });
 });

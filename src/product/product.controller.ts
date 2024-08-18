@@ -24,11 +24,7 @@ export class ProductController {
     @ApiResponse({ status: 404, description: 'Product not found' })
     @Get(':id')
     async findOne(@Param('id') id: number): Promise<Product> {
-        const product = await this.productService.findOne(id);
-        if (!product) {
-            throw new NotFoundException(`Product with ID ${id} not found`);
-        }
-        return product;
+        return await this.productService.findOne(id);
     }
 
     @ApiOperation({ summary: 'Create a new product' })
@@ -72,11 +68,7 @@ export class ProductController {
         @Param('id') id: number,
         @Body() updateProductDto: { name?: string; description?: string; imageUrl?: string; price?: number },
     ): Promise<Product> {
-        const product = await this.productService.update(id, updateProductDto);
-        if (!product) {
-            throw new NotFoundException(`Product with ID ${id} not found`);
-        }
-        return product;
+        return await this.productService.update(id, updateProductDto);
     }
 
     @ApiOperation({ summary: 'Delete a product by ID' })
@@ -85,10 +77,6 @@ export class ProductController {
     @ApiResponse({ status: 404, description: 'Product not found' })
     @Delete(':id')
     async delete(@Param('id') id: number): Promise<Product> {
-        const product = await this.productService.delete(id);
-        if (!product) {
-            throw new NotFoundException(`Product with ID ${id} not found`);
-        }
-        return product;
+        return await this.productService.delete(id);
     }
 }
