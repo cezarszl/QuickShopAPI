@@ -56,7 +56,7 @@ describe('UserService', () => {
 
     it('should handle user not found', async () => {
       (prisma.user.findUnique as jest.Mock).mockResolvedValue(null);
-      await expect(service.findUserById(999)).rejects.toThrow('User not found');
+      await expect(service.findUserById(999)).rejects.toThrow('User with ID 999 not found');
     });
   });
 

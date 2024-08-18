@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Delete, NotFoundException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from '@prisma/client';
 import { ApiTags, ApiBody, ApiParam, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -44,5 +44,6 @@ export class UserController {
     @Delete(':id')
     async deleteUser(@Param('id') id: number): Promise<User> {
         return this.userService.deleteUser(id);
+
     }
 }
