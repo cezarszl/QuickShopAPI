@@ -31,7 +31,7 @@ export class UserService {
                 where: { id },
             })
         } catch (error) {
-            throw new NotFoundException('User not found');
+            throw new NotFoundException(`User not found`);
         };
     }
 }
