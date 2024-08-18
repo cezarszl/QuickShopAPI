@@ -5,7 +5,7 @@ import { ApiTags, ApiBody, ApiParam, ApiOperation, ApiResponse } from '@nestjs/s
 import { ProductDto } from './dto/product.dto';
 
 
-@ApiTags('quickshop')
+@ApiTags('products')
 @Controller('products')
 export class ProductController {
     constructor(private readonly productService: ProductService) { }

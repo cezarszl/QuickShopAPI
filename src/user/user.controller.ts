@@ -4,7 +4,7 @@ import { User } from '@prisma/client';
 import { ApiTags, ApiBody, ApiParam, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { UserDto } from './dto/user.dto';
 
-@ApiTags('quickshop')
+@ApiTags('users')
 @Controller('users')
 export class UserController {
     constructor(private readonly userService: UserService) { }

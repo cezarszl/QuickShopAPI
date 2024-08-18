@@ -9,7 +9,6 @@ async function bootstrap() {
     .setTitle('QuickShop API')
     .setDescription('REST Api')
     .setVersion('1.0')
-    .addTag('quickshop')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
