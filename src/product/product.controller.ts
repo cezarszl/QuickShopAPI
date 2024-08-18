@@ -3,7 +3,8 @@ import { ProductService } from './product.service';
 import { Product } from '@prisma/client';
 import { ApiTags, ApiBody, ApiParam, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ProductDto } from './dto/product.dto';
-
+import { CreateProductDto } from './dto/create.product.dto';
+import { UpdateProductDto } from './dto/update.product.dto';
 
 @ApiTags('products')
 @Controller('products')
@@ -28,19 +29,7 @@ export class ProductController {
     }
 
     @ApiOperation({ summary: 'Create a new product' })
-    @ApiBody({
-        description: 'Product details', schema: {
-            type: 'object',
-            properties: {
-                name: { type: 'string', example: 'Laptop' },
-                description: { type: 'string', example: 'High-performance laptop' },
-                imageUrl: { type: 'string', example: 'https://example.com/laptop.jpg' },
-                price: { type: 'number', example: 999.99 },
-                ownerId: { type: 'number', example: 1, nullable: true }
-            },
-            required: ['name', 'description', 'imageUrl', 'price'],
-        }
-    })
+    @ApiBody({ type: CreateProductDto })
     @ApiResponse({ status: 201, description: 'The product has been successfully created.', type: ProductDto })
     @ApiResponse({ status: 400, description: 'Invalid input data.' })
     @Post()
@@ -50,17 +39,7 @@ export class ProductController {
 
     @ApiOperation({ summary: 'Update an existing product' })
     @ApiParam({ name: 'id', description: 'Unique identifier of the product to update', type: Number })
-    @ApiBody({
-        description: 'Updated product details', schema: {
-            type: 'object',
-            properties: {
-                name: { type: 'string', example: 'Laptop', nullable: true },
-                description: { type: 'string', example: 'Updated description', nullable: true },
-                imageUrl: { type: 'string', example: 'https://example.com/laptop_updated.jpg', nullable: true },
-                price: { type: 'number', example: 899.99, nullable: true }
-            },
-        }
-    })
+    @ApiBody({ type: UpdateProductDto })
     @ApiResponse({ status: 200, description: 'The product has been successfully updated.', type: ProductDto })
     @ApiResponse({ status: 404, description: 'Product not found' })
     @Put(':id')
