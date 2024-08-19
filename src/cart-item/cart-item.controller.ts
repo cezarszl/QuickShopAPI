@@ -1,10 +1,11 @@
-import { Controller, Post, Delete, Patch, Get, Param, Body, ParseIntPipe, HttpCode } from '@nestjs/common';
+import { Controller, Post, Delete, Patch, Get, Param, Body, ParseIntPipe, HttpCode, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
 import { CartItemService } from './cart-item.service';
 import { CartItemDto } from './dto/cart-item.dto';
 import { CartItem } from '@prisma/client';
 import { CreateCartItemDto } from './dto/create.cart-item.dto';
 import { PatchCartItemDto } from './dto/patch.cart-item.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('cart items')
 @Controller('cart-items')
@@ -12,6 +13,7 @@ export class CartItemController {
     constructor(private readonly cartItemService: CartItemService) { }
 
     @Post()
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Add an item to the cart' })
     @ApiResponse({ status: 201, description: 'Item added to the cart', type: CreateCartItemDto })
     @ApiBody({ type: CartItemDto })
@@ -24,6 +26,7 @@ export class CartItemController {
     }
 
     @Delete(':id')
+    @UseGuards(JwtAuthGuard)
     @HttpCode(204)
     @ApiOperation({ summary: 'Remove an item from the cart' })
     @ApiResponse({ status: 204, description: 'Item removed from the cart' })
@@ -34,6 +37,7 @@ export class CartItemController {
     }
 
     @Patch(':id')
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Update the quantity of an item in the cart' })
     @ApiResponse({ status: 200, description: 'Item quantity updated', type: CartItemDto })
     @ApiResponse({ status: 404, description: 'Item not found.' })
@@ -47,6 +51,7 @@ export class CartItemController {
     }
 
     @Get(':userId')
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Get all items in the cart for a user' })
     @ApiResponse({ status: 200, description: 'List of cart items', type: [CartItemDto] })
     @ApiResponse({ status: 404, description: 'Item not found.' })
