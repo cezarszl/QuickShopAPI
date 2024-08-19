@@ -70,8 +70,9 @@ describe('CartItemController', () => {
 
   describe('removeItem', () => {
     it('should remove an item from the cart', async () => {
-      await controller.removeItem(1);
+      const result = await controller.removeItem(1);
       expect(service.removeItem).toHaveBeenCalledWith(1);
+      expect(result).toBeUndefined();
     });
   });
 
