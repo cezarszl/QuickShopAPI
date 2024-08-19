@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Delete, NotFoundException } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Delete, ParseIntPipe, HttpCode } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from '@prisma/client';
 import { ApiTags, ApiBody, ApiParam, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -24,7 +24,7 @@ export class UserController {
     @ApiResponse({ status: 404, description: 'User not found.' })
     @ApiParam({ name: 'id', description: 'User ID' })
     @Get(':id')
-    async findUserById(@Param('id') id: number): Promise<User> {
+    async findUserById(@Param('id', ParseIntPipe) id: number): Promise<User> {
         return this.userService.findUserById(id);
     }
 
@@ -32,9 +32,10 @@ export class UserController {
     @ApiResponse({ status: 204, description: 'The user has been successfully deleted.' })
     @ApiResponse({ status: 404, description: 'User not found.' })
     @ApiParam({ name: 'id', description: 'User ID' })
+    @HttpCode(204)
     @Delete(':id')
-    async deleteUser(@Param('id') id: number): Promise<User> {
-        return this.userService.deleteUser(id);
+    async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<void> {
+        await this.userService.deleteUser(id);
 
     }
 }
