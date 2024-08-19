@@ -8,6 +8,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('QuickShop API')
     .setDescription('REST Api')
+    .addBearerAuth()
     .setVersion('1.0')
     .build();
 
