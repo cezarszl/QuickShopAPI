@@ -16,9 +16,9 @@ export class CartItemService {
         });
     }
 
-    async removeItem(id: number): Promise<CartItem> {
+    async removeItem(id: number): Promise<void> {
         try {
-            return await this.prisma.cartItem.delete({
+            await this.prisma.cartItem.delete({
                 where: { id },
             });
         } catch (error) {
@@ -38,7 +38,7 @@ export class CartItemService {
     }
 
     async getCartItems(userId: number): Promise<CartItem[]> {
-        return this.prisma.cartItem.findMany({
+        return await this.prisma.cartItem.findMany({
             where: { userId },
         });
     }
