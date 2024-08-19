@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { AuthService } from './auth.service';
 
 @Module({
     imports: [
@@ -8,7 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
             signOptions: { expiresIn: '60m' }
         })
     ],
-    providers: [],
+    providers: [AuthService],
     exports: [],
 })
 export class AuthModule { }
