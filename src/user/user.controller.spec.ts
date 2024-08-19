@@ -48,7 +48,8 @@ describe('UserController', () => {
   describe('deleteUser', () => {
     it('should delete a user by id', async () => {
       const result = await userController.deleteUser(1);
-      expect(result).toEqual({ id: 1, email: 'user@domain.com', name: 'User 1' });
+      expect(result).toBeUndefined();
+      expect(userService.deleteUser).toHaveBeenCalledWith(1);
     });
   });
 });

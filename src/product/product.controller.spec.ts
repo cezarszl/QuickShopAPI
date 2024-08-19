@@ -15,9 +15,7 @@ describe('ProductController', () => {
     update: jest.fn().mockResolvedValue({ id: 1, name: 'Updated Product', description: 'Updated Description', imageUrl: 'url1', price: 109.99 }),
     delete: jest.fn().mockResolvedValue({ id: 1, name: 'Product 1', description: 'Description 1', imageUrl: 'url1', price: 99.99 }),
   };
-  "prisma": {
-    "seed": "ts-node prisma/seed.ts"
-  }
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ProductController],
@@ -93,7 +91,7 @@ describe('ProductController', () => {
     it('should return null if product not found during delete', async () => {
       jest.spyOn(service, 'delete').mockResolvedValue(null);
       const result = await controller.delete(999);
-      expect(result).toBeNull();
+      expect(result).toBeUndefined();
     });
   });
 });

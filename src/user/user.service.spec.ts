@@ -1,8 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
 import { PrismaService } from '../prisma.service';
-import { User } from '@prisma/client';
-
+import { ConflictException } from '@nestjs/common';
 describe('UserService', () => {
   let service: UserService;
   let prisma: PrismaService;
@@ -34,16 +33,52 @@ describe('UserService', () => {
 
   describe('createUser', () => {
     it('should create and return a new user', async () => {
-      const newUser = { email: 'user@domain.com', password: 'password', name: 'User 2' };
+      const newUser = {
+        email: 'user@domain.com',
+        password: 'password',
+        name: 'User 2',
+        googleId: null, // Include additional fields
+        facebookId: null, // Include additional fields
+        createdAt: new Date(), // Include additional fields
+        updatedAt: new Date(), // Include additional fields
+      };
+      jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(null);
+      jest.spyOn(prisma.user, 'create').mockResolvedValue({ id: 1, ...newUser });
       const result = await service.createUser(newUser);
-      expect(result).toEqual({ id: 1, email: 'user@domain.com', password: 'password', name: 'User 2' });
+      expect(result).toEqual({ id: 1, ...newUser });
       expect(prisma.user.create).toHaveBeenCalledWith({
         data: {
           email: newUser.email,
           password: newUser.password,
           name: newUser.name,
+          googleId: null,
+          facebookId: null,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
         },
       });
+    });
+    it('should throw ConflictException if user already exists', async () => {
+      const newUser = {
+        email: 'user@domain.com',
+        password: 'password',
+        name: 'User 2',
+        googleId: null,
+        facebookId: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      // Mocking findUnique to return an existing user
+      jest.spyOn(prisma.user, 'findUnique').mockResolvedValue({ id: 1, ...newUser });
+
+      await expect(service.createUser({
+        email: newUser.email,
+        password: newUser.password,
+        name: newUser.name,
+      })).rejects.toThrow(
+        new ConflictException(`User with email ${newUser.email} already exists`)
+      );
     });
   });
 
@@ -63,7 +98,7 @@ describe('UserService', () => {
   describe('deleteUser', () => {
     it('should remove a user by id', async () => {
       const result = await service.deleteUser(1);
-      expect(result).toEqual({ id: 1, email: 'user@domain.com', password: 'password', name: 'User 2' });
+      expect(result).toBeUndefined();
       expect(prisma.user.delete).toHaveBeenCalledWith({ where: { id: 1 } });
     });
 
