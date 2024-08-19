@@ -1,5 +1,5 @@
 import { Controller, Post, Delete, Patch, Get, Param, Body, ParseIntPipe, HttpCode, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { CartItemService } from './cart-item.service';
 import { CartItemDto } from './dto/cart-item.dto';
 import { CartItem } from '@prisma/client';
@@ -8,6 +8,7 @@ import { PatchCartItemDto } from './dto/patch.cart-item.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('cart items')
+@ApiBearerAuth()
 @Controller('cart-items')
 export class CartItemController {
     constructor(private readonly cartItemService: CartItemService) { }

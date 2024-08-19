@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Get, Param, Delete, ParseIntPipe, HttpCode, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from '@prisma/client';
-import { ApiTags, ApiBody, ApiParam, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiBody, ApiParam, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { UserDto } from './dto/user.dto';
 import { CreateUserDto } from './dto/create.user.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -9,6 +9,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('users')
 @Controller('users')
+@ApiBearerAuth()
 export class UserController {
     constructor(private readonly userService: UserService) { }
 

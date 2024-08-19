@@ -1,13 +1,14 @@
 import { Controller, Get, Post, Body, Param, Put, Delete, ParseIntPipe, HttpCode, UseGuards } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Product } from '@prisma/client';
-import { ApiTags, ApiBody, ApiParam, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiBody, ApiParam, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { ProductDto } from './dto/product.dto';
 import { CreateProductDto } from './dto/create.product.dto';
 import { UpdateProductDto } from './dto/update.product.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('products')
+@ApiBearerAuth()
 @Controller('products')
 export class ProductController {
     constructor(private readonly productService: ProductService) { }
