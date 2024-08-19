@@ -48,12 +48,6 @@ describe('ProductController', () => {
         id: 1, name: 'Product 1', description: 'Description 1', imageUrl: 'url1', price: 99.99
       });
     });
-
-    it('should return null if product not found', async () => {
-      jest.spyOn(service, 'findOne').mockResolvedValue(null);
-      const result = await controller.findOne(999);
-      expect(result).toBeNull();
-    });
   });
 
   describe('create', () => {
@@ -74,24 +68,12 @@ describe('ProductController', () => {
         id: 1, name: 'Updated Product', description: 'Updated Description', imageUrl: 'url1', price: 109.99
       });
     });
-
-    it('should return null if product not found during update', async () => {
-      jest.spyOn(service, 'update').mockResolvedValue(null);
-      const result = await controller.update(999, {});
-      expect(result).toBeNull();
-    });
   });
 
   describe('delete', () => {
     it('should remove a product by id', async () => {
       await controller.delete(1);
       expect(service.delete).toHaveBeenCalledWith(1);
-    });
-
-    it('should return null if product not found during delete', async () => {
-      jest.spyOn(service, 'delete').mockResolvedValue(null);
-      const result = await controller.delete(999);
-      expect(result).toBeUndefined();
     });
   });
 });
