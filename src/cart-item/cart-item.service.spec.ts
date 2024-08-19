@@ -88,14 +88,7 @@ describe('CartItemService', () => {
   describe('removeItem', () => {
     it('should remove an item from the cart', async () => {
       const result = await service.removeItem(1);
-      expect(result).toEqual({
-        id: 1,
-        userId: 1,
-        productId: 1,
-        quantity: 2,
-        createdAt: expect.any(Date),
-        updatedAt: expect.any(Date),
-      });
+      expect(result).toBeUndefined();
       expect(prisma.cartItem.delete).toHaveBeenCalledWith({ where: { id: 1 } });
     });
 
