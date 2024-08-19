@@ -1,4 +1,4 @@
-import { Controller, Post, Delete, Patch, Get, Param, Body, NotFoundException } from '@nestjs/common';
+import { Controller, Post, Delete, Patch, Get, Param, Body, ParseIntPipe } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
 import { CartItemService } from './cart-item.service';
 import { CartItemDto } from './dto/cart-item.dto';
@@ -25,7 +25,7 @@ export class CartItemController {
     @ApiOperation({ summary: 'Remove an item from the cart' })
     @ApiResponse({ status: 204, description: 'Item removed from the cart' })
     @ApiParam({ name: 'id', description: 'ID of the cart item to remove' })
-    async removeItem(@Param('id') id: number): Promise<void> {
+    async removeItem(@Param('id', ParseIntPipe) id: number): Promise<void> {
         await this.cartItemService.removeItem(id);
     }
 
@@ -35,7 +35,7 @@ export class CartItemController {
     @ApiParam({ name: 'id', description: 'ID of the cart item to update' })
     @ApiBody({ type: CartItemDto, description: 'Updated quantity for the cart item' })
     async updateQuantity(
-        @Param('id') id: number,
+        @Param('id', ParseIntPipe) id: number,
         @Body('quantity') quantity: number,
     ): Promise<CartItem> {
         return this.cartItemService.updateQuantity(id, quantity);
@@ -45,11 +45,8 @@ export class CartItemController {
     @ApiOperation({ summary: 'Get all items in the cart for a user' })
     @ApiResponse({ status: 200, description: 'List of cart items', type: [CartItemDto] })
     @ApiParam({ name: 'userId', description: 'ID of the user whose cart items are to be retrieved' })
-    async getCartItems(@Param('userId') userId: number): Promise<CartItem[]> {
-        const items = await this.cartItemService.getCartItems(userId);
-        if (!items) {
-            throw new NotFoundException(`Cart items for user with ID ${userId} not found`);
-        }
-        return items;
+    async getCartItems(@Param('userId', ParseIntPipe) userId: number): Promise<CartItem[]> {
+        return await this.cartItemService.getCartItems(userId);
+
     }
 }
