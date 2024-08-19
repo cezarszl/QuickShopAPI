@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, ParseIntPipe, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, ParseIntPipe, HttpCode, UseGuards } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Product } from '@prisma/client';
 import { ApiTags, ApiBody, ApiParam, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ProductDto } from './dto/product.dto';
 import { CreateProductDto } from './dto/create.product.dto';
 import { UpdateProductDto } from './dto/update.product.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('products')
 @Controller('products')
@@ -13,6 +14,7 @@ export class ProductController {
 
     @ApiOperation({ summary: 'Retrieve all products' })
     @ApiResponse({ status: 200, description: 'List of all products', type: [ProductDto] })
+    @UseGuards(JwtAuthGuard)
     @Get()
     async findAll(): Promise<Product[]> {
         return this.productService.findAll();
