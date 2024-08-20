@@ -5,7 +5,7 @@ import { CartItemDto } from './dto/cart-item.dto';
 import { CartItem } from '@prisma/client';
 import { CreateCartItemDto } from './dto/create.cart-item.dto';
 import { PatchCartItemDto } from './dto/patch.cart-item.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('cart items')
 @ApiBearerAuth()

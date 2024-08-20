@@ -4,7 +4,7 @@ import { User } from '@prisma/client';
 import { ApiTags, ApiBody, ApiParam, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { UserDto } from './dto/user.dto';
 import { CreateUserDto } from './dto/create.user.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 
 @ApiTags('users')
