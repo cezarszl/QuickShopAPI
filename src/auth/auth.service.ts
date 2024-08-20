@@ -64,4 +64,22 @@ export class AuthService {
             throw new UnauthorizedException('Invalid token')
         }
     }
+
+    async validateGoogleUser(googleUser: any) {
+
+        //Checking if the user with such email exists
+        let user = await this.userService.findUserByEmail(googleUser.email);
+
+        if (!user) {
+            user = await this.userService.createUser({
+                email: googleUser.email,
+                googleId: googleUser.id,
+                name: googleUser.name,
+            });
+        } else if (!user.googleId) {
+            user
+        }
+
+    }
+}
 }
