@@ -45,4 +45,11 @@ export class UserService {
             throw new NotFoundException(`User with ID ${id} not found`);
         };
     }
+
+    async updateUserGoogleID(userId: number, googleId: string): Promise<User> {
+        return this.prisma.user.update({
+            where: { id: userId },
+            data: { googleId }
+        })
+    }
 }
