@@ -5,6 +5,8 @@ import { JwtPayload } from '../interfaces/jwt-payload.interface';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcrypt';
+import { User } from '@prisma/client';
+
 
 @Injectable()
 export class AuthService {
@@ -50,6 +52,23 @@ export class AuthService {
         const payload: JwtPayload = { email: newUser.email, sub: newUser.id };
         return this.jwtService.sign(payload);
 
+    }
+
+    async validateGoogleUser({ email, name, googleId }: { email: string, name: string, googleId: string }): Promise<User> {
+        let user = await this.userService.findUserByEmail(email);
+
+        if (user) {
+            if (!user.googleId) {
+                user = await this.userService.updateUserGoogleID(user.id, googleId);
+            }
+        } else {
+            user = await this.userService.createUser({
+                email,
+                name,
+                googleId,
+            });
+        }
+        return user;
     }
 
     async login(loginDto: LoginDto): Promise<string> {
