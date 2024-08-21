@@ -34,6 +34,24 @@ export class AuthService {
 
     }
 
+    async registerGoogleUser(registerDto: RegisterDto): Promise<string> {
+        const { email, name, googleId } = registerDto;
+
+        await this.userService.checkIfUserExists(email);
+
+        //Creating a new user
+        const newUser = await this.userService.createUser({
+            email,
+            name,
+            googleId
+        });
+
+        //Generating JWT
+        const payload: JwtPayload = { email: newUser.email, sub: newUser.id };
+        return this.jwtService.sign(payload);
+
+    }
+
     async login(loginDto: LoginDto): Promise<string> {
         const { email, password } = loginDto;
 

@@ -24,4 +24,12 @@ export class RegisterDto {
     })
     @IsString()
     name: string;
+
+    @ApiProperty({
+        description: 'Name of the user',
+        example: 'John Doe',
+    })
+    @IsString()
+    googleId?: string
+
 }
