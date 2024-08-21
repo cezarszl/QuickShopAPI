@@ -28,7 +28,7 @@ export class AuthController {
     })
     async register(@Body() registerDto: RegisterDto): Promise<string> {
         try {
-            return await this.authService.register(registerDto);
+            return await this.authService.registerUser(registerDto);
         } catch (error) {
             if (error instanceof ConflictException) {
                 throw new ConflictException('User already exists');

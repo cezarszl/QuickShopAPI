@@ -13,14 +13,10 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) { }
 
-    async register(registerDto: RegisterDto): Promise<string> {
+    async registerUser(registerDto: RegisterDto): Promise<string> {
         const { email, password, name } = registerDto;
 
-        // Checking if user already exists
-        const existingUser = await this.userService.findUserByEmail(email);
-        if (existingUser) {
-            throw new ConflictException(`User with email ${email} already exist`);
-        }
+        await this.userService.checkIfUserExists(email);
 
         //Hashing password
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -64,22 +60,5 @@ export class AuthService {
             throw new UnauthorizedException('Invalid token')
         }
     }
-
-    async validateGoogleUser(googleUser: any) {
-
-        //Checking if the user with such email exists
-        let user = await this.userService.findUserByEmail(googleUser.email);
-
-        if (!user) {
-            user = await this.userService.createUser({
-                email: googleUser.email,
-                googleId: googleUser.id,
-                name: googleUser.name,
-            });
-        } else if (!user.googleId) {
-            user
-        }
-
-    }
 }
-}
+
