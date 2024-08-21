@@ -10,6 +10,10 @@ QuickShop API is a RESTful API built using NestJS and Prisma that allows users t
 - **Product Management**: Create, read, update, and delete products.
 - **Database Integration**: Prisma is used as the ORM to interact with the database.
 - **Swagger Documentation**: API documentation generated using Swagger.
+  
+## Documentation
+
+[QuickShopAPI](https://quickshopapi-844fd64d6465.herokuapp.com/api) - See docs online.
 
 ## Technologies
 
