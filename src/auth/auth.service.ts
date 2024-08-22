@@ -16,36 +16,19 @@ export class AuthService {
     ) { }
 
     async registerUser(registerDto: RegisterDto): Promise<string> {
-        const { email, password, name } = registerDto;
+        const { email, password, name, googleId } = registerDto;
 
         await this.userService.checkIfUserExists(email);
 
         //Hashing password
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
 
         //Creating a new user
         const newUser = await this.userService.createUser({
             email,
             password: hashedPassword,
             name,
-        });
-
-        //Generating JWT
-        const payload: JwtPayload = { email: newUser.email, sub: newUser.id };
-        return this.jwtService.sign(payload);
-
-    }
-
-    async registerGoogleUser(registerDto: RegisterDto): Promise<string> {
-        const { email, name, googleId } = registerDto;
-
-        await this.userService.checkIfUserExists(email);
-
-        //Creating a new user
-        const newUser = await this.userService.createUser({
-            email,
-            name,
-            googleId
+            googleId,
         });
 
         //Generating JWT
@@ -79,9 +62,8 @@ export class AuthService {
         if (!user) {
             throw new UnauthorizedException('Invalid credientals');
         }
-        //Comparing passwords
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
+        // Comparing passwords
+        if (!user.password || !(await bcrypt.compare(password, user.password))) {
             throw new UnauthorizedException('Invalid credentials');
         }
         //Generating JWT

@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -63,4 +63,22 @@ export class AuthController {
             throw error;
         }
     }
+
+    @Get('google')
+    @ApiOperation({ summary: 'Redirect to Google for authentication' })
+    @ApiResponse({ status: 302, description: 'Redirects to Google OAuth2 login page.' })
+    googleAuth(@Req() req) {
+
+    }
+
+    // 2. Endpoint do obsługi callbacku od Google
+    @Get('google/callback')
+    @ApiOperation({ summary: 'Handle Google OAuth2 callback' })
+    @ApiResponse({ status: 200, description: 'Returns JWT token after successful Google login.' })
+    googleAuthRedirect(@Req() req) {
+
+        const user = req.user;
+        return this.authService.login(user);
+    }
+
 }
