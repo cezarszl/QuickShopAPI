@@ -3,11 +3,14 @@ import { Strategy, VerifyCallback } from "passport-google-oauth20";
 import { Injectable } from "@nestjs/common";
 import { AuthService } from "../auth.service";
 import { User } from "@prisma/client";
-
+import { JwtService } from "@nestjs/jwt";
 @Injectable()
 
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
-    constructor(private authService: AuthService) {
+    constructor(
+        private readonly authService: AuthService,
+        private readonly jwtService: JwtService,
+    ) {
         super({
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -24,7 +27,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
         try {
             const user: User = await this.authService.validateGoogleUser({ email, googleId, name });
-            done(null, user);
+            const payload = { email: user.email, sub: user.id };
+            const jwtToken = this.jwtService.sign(payload);
+            done(null, { access_token: jwtToken });
         } catch (error) {
             done(error, false);
         }

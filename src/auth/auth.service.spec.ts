@@ -64,7 +64,7 @@ describe('AuthService', () => {
       jest.spyOn(userService, 'createUser').mockResolvedValue(newUser);
       jest.spyOn(jwtService, 'sign').mockReturnValue('jwtToken');
 
-      const result = await authService.register(registerDto);
+      const result = await authService.registerUser(registerDto);
       expect(result).toEqual('jwtToken');
       expect(userService.createUser).toHaveBeenCalledWith({
         email: registerDto.email,
@@ -88,7 +88,7 @@ describe('AuthService', () => {
 
       jest.spyOn(userService, 'findUserByEmail').mockResolvedValue(existingUser);
 
-      await expect(authService.register({ email: 'existing@test.com', password: 'password', name: 'Existing User' }))
+      await expect(authService.registerUser({ email: 'existing@test.com', password: 'password', name: 'Existing User' }))
         .rejects
         .toThrow(ConflictException);
     });

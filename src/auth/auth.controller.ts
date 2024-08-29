@@ -1,9 +1,10 @@
-import { Controller, Post, Body, Get, Req, Res } from '@nestjs/common';
+import { Controller, Post, Body, Get, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
+import { GoogleAuthGuard } from './guards/google-auth.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -65,6 +66,7 @@ export class AuthController {
     }
 
     @Get('google')
+    @UseGuards(GoogleAuthGuard)
     @ApiOperation({ summary: 'Redirect to Google for authentication' })
     @ApiResponse({ status: 302, description: 'Redirects to Google OAuth2 login page.' })
     googleAuth(@Req() req) {
@@ -73,12 +75,16 @@ export class AuthController {
 
     // 2. Endpoint do obsługi callbacku od Google
     @Get('google/callback')
+    @UseGuards(GoogleAuthGuard)
     @ApiOperation({ summary: 'Handle Google OAuth2 callback' })
     @ApiResponse({ status: 200, description: 'Returns JWT token after successful Google login.' })
     googleAuthRedirect(@Req() req) {
 
-        const user = req.user;
-        return this.authService.login(user);
+        // Tutaj otrzymujesz token JWT z req.user, który jest zwracany z metody done w GoogleStrategy
+        const jwtToken = req.user;
+        return { access_token: jwtToken };
+        // const user = req.user;
+        // return this.authService.login(user);
     }
 
 }

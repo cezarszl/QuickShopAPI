@@ -20,6 +20,7 @@ export class UserService {
     async createUser(data: CreateUserDto): Promise<User> {
 
         await this.checkIfUserExists(data.email);
+
         return this.prisma.user.create({
             data,
         });
