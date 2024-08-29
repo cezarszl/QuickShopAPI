@@ -6,8 +6,11 @@ import { Product } from '@prisma/client';
 export class ProductService {
     constructor(private readonly prisma: PrismaService) { }
 
-    async findAll(): Promise<Product[]> {
-        return this.prisma.product.findMany();
+    async findAll(limit = 10, offset = 0): Promise<Product[]> {
+        return this.prisma.product.findMany({
+            skip: offset,
+            take: limit,
+        });
     }
 
     async findOne(id: number): Promise<Product> {

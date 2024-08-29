@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, ParseIntPipe, HttpCode, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, ParseIntPipe, HttpCode, UseGuards, Query } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Product } from '@prisma/client';
-import { ApiTags, ApiBody, ApiParam, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiBody, ApiParam, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { ProductDto } from './dto/product.dto';
 import { CreateProductDto } from './dto/create.product.dto';
 import { UpdateProductDto } from './dto/update.product.dto';
@@ -15,10 +15,17 @@ export class ProductController {
 
     @ApiOperation({ summary: 'Retrieve all products' })
     @ApiResponse({ status: 200, description: 'List of all products', type: [ProductDto] })
+    @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Limit the number of products returned' })
+    @ApiQuery({ name: 'offset', required: false, type: Number, description: 'Skip the first N products' })
     @UseGuards(JwtAuthGuard)
     @Get()
-    async findAll(): Promise<Product[]> {
-        return this.productService.findAll();
+    async findAll(@Query('limit') limit?: string, @Query('offset') offset?: string): Promise<Product[]> {
+
+        const take = limit ? parseInt(limit, 10) : undefined;
+        const skip = offset ? parseInt(offset, 10) : undefined;
+
+        return this.productService.findAll(take, skip);
+
     }
 
 
