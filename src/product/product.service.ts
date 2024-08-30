@@ -6,8 +6,38 @@ import { Product } from '@prisma/client';
 export class ProductService {
     constructor(private readonly prisma: PrismaService) { }
 
-    async findAll(limit = 10, offset = 0): Promise<Product[]> {
+    async findAll(filters: {
+        category?: string;
+        name?: string;
+        minPrice?: number;
+        maxPrice?: number;
+        limit?: number;
+        offset?: number;
+    }): Promise<Product[]> {
+        const { category, name, minPrice, maxPrice, limit, offset } = filters;
+
+        const where: any = {};
+
+        if (category)
+            where.category = category;
+
+        if (name) {
+            where.name = {
+                contains: name,
+                mode: 'insensitive',
+            };
+        }
+
+        if (minPrice !== undefined) {
+            where.price = { ...where.price, gte: minPrice };
+        }
+
+        if (maxPrice !== undefined) {
+            where.price = { ...where.price, lte: maxPrice };
+        }
+
         return this.prisma.product.findMany({
+            where,
             skip: offset,
             take: limit,
         });

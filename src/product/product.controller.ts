@@ -15,17 +15,31 @@ export class ProductController {
 
     @ApiOperation({ summary: 'Retrieve all products' })
     @ApiResponse({ status: 200, description: 'List of all products', type: [ProductDto] })
+    @ApiQuery({ name: 'category', required: false, type: String })
+    @ApiQuery({ name: 'name', required: false, type: String })
+    @ApiQuery({ name: 'minPrice', required: false, type: Number })
+    @ApiQuery({ name: 'maxPrice', required: false, type: Number })
     @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Limit the number of products returned' })
     @ApiQuery({ name: 'offset', required: false, type: Number, description: 'Skip the first N products' })
     @UseGuards(JwtAuthGuard)
     @Get()
-    async findAll(@Query('limit') limit?: string, @Query('offset') offset?: string): Promise<Product[]> {
-
-        const take = limit ? parseInt(limit, 10) : undefined;
-        const skip = offset ? parseInt(offset, 10) : undefined;
-
-        return this.productService.findAll(take, skip);
-
+    async findAll(
+        @Query('category') category?: string,
+        @Query('name') name?: string,
+        @Query('minPrice') minPrice?: string,
+        @Query('maxPrice') maxPrice?: string,
+        @Query('limit') limit?: string,
+        @Query('offset') offset?: string,
+    ): Promise<Product[]> {
+        const filters = {
+            category,
+            name,
+            maxPrice: maxPrice ? parseFloat(maxPrice) : undefined,
+            minPrice: minPrice ? parseFloat(minPrice) : undefined,
+            limit: limit ? parseInt(limit, 10) : undefined,
+            offset: offset ? parseInt(offset, 10) : undefined,
+        }
+        return this.productService.findAll(filters);
     }
 
 
