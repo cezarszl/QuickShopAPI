@@ -54,6 +54,7 @@ export class ProductService {
     }
 
     async create(data: {
+        category: string;
         name: string;
         description: string;
         imageUrl: string;

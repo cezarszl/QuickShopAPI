@@ -15,6 +15,7 @@ async function main() {
 
         await prisma.product.create({
             data: {
+                category: faker.commerce.productMaterial(),
                 name: faker.commerce.productName(),
                 description: faker.commerce.productDescription(),
                 imageUrl: faker.image.url(),

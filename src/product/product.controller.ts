@@ -59,7 +59,7 @@ export class ProductController {
     @ApiResponse({ status: 400, description: 'Invalid input data.' })
     @UseGuards(JwtAuthGuard)
     @Post()
-    async create(@Body() createProductDto: { name: string; description: string; imageUrl: string; price: number; ownerId?: number }): Promise<Product> {
+    async create(@Body() createProductDto: { category: string, name: string; description: string; imageUrl: string; price: number; ownerId?: number }): Promise<Product> {
         return this.productService.create(createProductDto);
     }
 
