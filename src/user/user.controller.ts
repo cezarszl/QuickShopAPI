@@ -1,10 +1,11 @@
-import { Controller, Post, Body, Get, Param, Delete, ParseIntPipe, HttpCode, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Delete, ParseIntPipe, HttpCode, UseGuards, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from '@prisma/client';
 import { ApiTags, ApiBody, ApiParam, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { UserDto } from './dto/user.dto';
 import { CreateUserDto } from './dto/create.user.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { UpdateUserDto } from './dto/update.user.dto';
 
 
 @ApiTags('users')
@@ -31,6 +32,27 @@ export class UserController {
     @Get(':id')
     async findUserById(@Param('id', ParseIntPipe) id: number): Promise<User> {
         return this.userService.findUserById(id);
+    }
+
+
+    @ApiOperation({ summary: 'Update a user by ID' })
+    @ApiParam({
+        name: 'id',
+        type: 'string',
+        description: 'ID of the user to update',
+        example: '1',
+    })
+    @ApiBody({ type: UpdateUserDto })
+    @ApiResponse({
+        status: 200,
+        description: 'The user has been successfully updated.',
+        type: UserDto,
+    })
+    @ApiResponse({ status: 404, description: 'User not found.' })
+    @UseGuards(JwtAuthGuard)
+    @Put(':id')
+    async updateUser(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto): Promise<User> {
+        return this.userService.updateUser(id, updateUserDto);
     }
 
     @ApiOperation({ summary: 'Delete a user by ID' })
