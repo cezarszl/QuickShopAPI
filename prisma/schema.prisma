@@ -24,6 +24,8 @@ model User {
   updatedAt  DateTime   @updatedAt
   products   Product[]
   cartItems  CartItem[]
+  orders     Order[]
+
 }
 
 model Product {
@@ -37,7 +39,7 @@ model Product {
   updatedAt   DateTime   @updatedAt
   owner       User?      @relation(fields: [ownerId], references: [id])
   ownerId     Int?
-  CartItem    CartItem[]
+  cartItems    CartItem[]
 }
 
 model CartItem {
@@ -49,4 +51,14 @@ model CartItem {
   productId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id          Int        @id @default(autoincrement())
+  userId      Int
+  user        User       @relation(fields: [userId], references: [id])
+  items       Json       
+  totalAmount Float
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
