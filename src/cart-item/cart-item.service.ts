@@ -26,6 +26,17 @@ export class CartItemService {
         }
     }
 
+    async clearCart(userId: number): Promise<void> {
+        const user = await this.prisma.user.findUnique({ where: { id: userId } });
+
+        if (!user) {
+            throw new NotFoundException(`User with ID ${userId} not found`);
+        }
+
+        await this.prisma.cartItem.deleteMany({
+            where: { userId: userId },
+        })
+    }
     async updateQuantity(id: number, quantity: number): Promise<CartItem> {
         try {
             return await this.prisma.cartItem.update({

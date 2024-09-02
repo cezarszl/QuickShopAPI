@@ -1,4 +1,4 @@
-import { Controller, Post, Delete, Patch, Get, Param, Body, ParseIntPipe, HttpCode, UseGuards } from '@nestjs/common';
+import { Controller, Post, Delete, Patch, Get, Param, Body, ParseIntPipe, HttpCode, UseGuards, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { CartItemService } from './cart-item.service';
 import { CartItemDto } from './dto/cart-item.dto';
@@ -35,6 +35,18 @@ export class CartItemController {
     @ApiParam({ name: 'id', description: 'ID of the cart item to remove' })
     async removeItem(@Param('id', ParseIntPipe) id: number): Promise<void> {
         await this.cartItemService.removeItem(id);
+    }
+
+    @Delete('clear/:userId')
+    @UseGuards(JwtAuthGuard)
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @ApiOperation({ summary: 'Clear the entire cart for a user' })
+    @ApiResponse({ status: 204, description: 'Cart cleared successfully.' })
+    @ApiResponse({ status: 404, description: 'User not found.' })
+    @ApiParam({ name: 'userId', description: 'ID of the user whose cart will be cleared' })
+
+    async clearCart(@Param('userId', ParseIntPipe) id: number): Promise<void> {
+        await this.cartItemService.clearCart(id);
     }
 
     @Patch(':id')
