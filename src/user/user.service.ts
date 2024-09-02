@@ -3,6 +3,8 @@ import { PrismaService } from '../prisma.service';
 import { User } from '@prisma/client';
 import { CreateUserDto } from './dto/create.user.dto';
 import { UpdateUserDto } from './dto/update.user.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
+import * as bcrypt from 'bcrypt';
 
 
 @Injectable()
@@ -48,6 +50,26 @@ export class UserService {
             });
     }
 
+    async changePassword(id: number, changePasswordDto: ChangePasswordDto): Promise<User> {
+        const { currentPassword, newPassword } = changePasswordDto;
+
+        const user = await this.prisma.user.findUnique({ where: { id } });
+        if (!user) {
+            throw new NotFoundException('User not found')
+        }
+
+        const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+        if (!isPasswordValid) {
+            throw new NotFoundException('Current password is incorrect');
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        return this.prisma.user.update({
+            where: { id },
+            data: { password: hashedPassword },
+        });
+    }
     async deleteUser(id: number): Promise<void> {
         try {
             await this.prisma.user.delete({

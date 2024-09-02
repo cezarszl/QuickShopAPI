@@ -1,11 +1,12 @@
 import { Controller, Post, Body, Get, Param, Delete, ParseIntPipe, HttpCode, UseGuards, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from '@prisma/client';
-import { ApiTags, ApiBody, ApiParam, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiBody, ApiParam, ApiOperation, ApiResponse, ApiBearerAuth, ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { UserDto } from './dto/user.dto';
 import { CreateUserDto } from './dto/create.user.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UpdateUserDto } from './dto/update.user.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 
 @ApiTags('users')
@@ -53,6 +54,16 @@ export class UserController {
     @Put(':id')
     async updateUser(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto): Promise<User> {
         return this.userService.updateUser(id, updateUserDto);
+    }
+
+
+    @ApiOperation({ summary: 'Change user password' })
+    @ApiOkResponse({ description: 'Password successfully changed' })
+    @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+    @UseGuards(JwtAuthGuard)
+    @Put(':id/change-password')
+    async changePassword(@Param('id', ParseIntPipe) id: number, @Body() changeUserDto: ChangePasswordDto): Promise<User> {
+        return this.userService.changePassword(id, changeUserDto);
     }
 
     @ApiOperation({ summary: 'Delete a user by ID' })
