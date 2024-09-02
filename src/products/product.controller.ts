@@ -9,7 +9,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('products')
 @ApiBearerAuth()
-@Controller('products')
+@Controller('product')
 export class ProductController {
     constructor(private readonly productService: ProductService) { }
 
