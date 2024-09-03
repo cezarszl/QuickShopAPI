@@ -6,6 +6,7 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcrypt';
 import { User } from '@prisma/client';
+import { RegisterResponseDto } from './dto/register.response.dto';
 
 
 @Injectable()
@@ -15,7 +16,7 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) { }
 
-    async registerUser(registerDto: RegisterDto): Promise<string> {
+    async registerUser(registerDto: RegisterDto): Promise<RegisterResponseDto> {
         const { email, password, name, googleId } = registerDto;
 
         await this.userService.checkIfUserExistsByEmail(email);
@@ -33,7 +34,16 @@ export class AuthService {
 
         //Generating JWT
         const payload: JwtPayload = { email: newUser.email, sub: newUser.id };
-        return this.jwtService.sign(payload);
+        const accessToken = this.jwtService.sign(payload);
+
+        return {
+            accessToken,
+            user: {
+                email: newUser.email,
+                name: newUser.name,
+                googleId: newUser.googleId
+            }
+        };
 
     }
 

@@ -5,6 +5,8 @@ import { RegisterDto } from './dto/register.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
+import { RegisterResponseDto } from './dto/register.response.dto';
+import { Request } from 'express';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -17,17 +19,13 @@ export class AuthController {
     @ApiResponse({
         status: 201,
         description: 'User successfully registered and token returned.',
-        schema: {
-            example: {
-                accessToken: 'jwtToken',
-            },
-        },
+        type: RegisterResponseDto
     })
     @ApiResponse({
         status: 409,
         description: 'Conflict: User with email already exists.',
     })
-    async register(@Body() registerDto: RegisterDto): Promise<string> {
+    async register(@Body() registerDto: RegisterDto): Promise<RegisterResponseDto> {
         try {
             return await this.authService.registerUser(registerDto);
         } catch (error) {
@@ -70,18 +68,18 @@ export class AuthController {
     @UseGuards(GoogleAuthGuard)
     @ApiOperation({ summary: 'Redirect to Google for authentication' })
     @ApiResponse({ status: 302, description: 'Redirects to Google OAuth2 login page.' })
-    googleAuth(@Req() req) {
+    googleAuth(@Req() req: Request) {
 
     }
 
     @Get('google/callback')
     @UseGuards(GoogleAuthGuard)
     @ApiOperation({ summary: 'Handle Google OAuth2 callback' })
-    @ApiResponse({ status: 200, description: 'Returns JWT token after successful Google login.' })
-    googleAuthRedirect(@Req() req) {
+    @ApiResponse({ status: 200, description: 'Returns JWT token after successful Google login.', type: RegisterResponseDto })
+    @ApiResponse({ status: 400, description: 'Invalid Google login or failed to authenticate.' })
+    googleAuthRedirect(@Req() req: Request) {
 
-        const jwtToken = req.user;
-        return { access_token: jwtToken };
+        return req.user;
     }
 
 }
