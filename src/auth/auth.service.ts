@@ -1,6 +1,6 @@
 import { Injectable, ConflictException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from '../user/user.service';
+import { UserService } from '../users/user.service';
 import { JwtPayload } from '../interfaces/jwt-payload.interface';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -18,7 +18,7 @@ export class AuthService {
     async registerUser(registerDto: RegisterDto): Promise<string> {
         const { email, password, name, googleId } = registerDto;
 
-        await this.userService.checkIfUserExists(email);
+        await this.userService.checkIfUserExistsByEmail(email);
 
         //Hashing password
         const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
