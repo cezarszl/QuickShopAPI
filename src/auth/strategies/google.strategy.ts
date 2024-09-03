@@ -29,7 +29,14 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
             const user: User = await this.authService.validateGoogleUser({ email, googleId, name });
             const payload = { email: user.email, sub: user.id };
             const jwtToken = this.jwtService.sign(payload);
-            done(null, { access_token: jwtToken });
+            done(null, {
+                access_token: jwtToken,
+                user: {
+                    email: user.email,
+                    name: user.name,
+                    googleId: user.googleId,
+                }
+            });
         } catch (error) {
             done(error, false);
         }
