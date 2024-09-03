@@ -9,25 +9,23 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('cart items')
 @ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('cart-items')
 export class CartItemController {
     constructor(private readonly cartItemService: CartItemService) { }
 
     @Post()
-    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Add an item to the cart' })
-    @ApiResponse({ status: 201, description: 'Item added to the cart', type: CreateCartItemDto })
-    @ApiBody({ type: CartItemDto })
+    @ApiResponse({ status: 201, description: 'Item added to the cart', type: CartItemDto })
+    @ApiBody({ type: CreateCartItemDto })
     async addItem(
-        @Body('userId') userId: number,
-        @Body('productId') productId: number,
-        @Body('quantity') quantity: number,
+        @Body() createCartItemDto: CreateCartItemDto
     ): Promise<CartItem> {
+        const { userId, productId, quantity } = createCartItemDto;
         return this.cartItemService.addItem(userId, productId, quantity);
     }
 
     @Delete(':id')
-    @UseGuards(JwtAuthGuard)
     @HttpCode(204)
     @ApiOperation({ summary: 'Remove an item from the cart' })
     @ApiResponse({ status: 204, description: 'Item removed from the cart' })
@@ -38,19 +36,17 @@ export class CartItemController {
     }
 
     @Delete('clear/:userId')
-    @UseGuards(JwtAuthGuard)
     @HttpCode(HttpStatus.NO_CONTENT)
     @ApiOperation({ summary: 'Clear the entire cart for a user' })
     @ApiResponse({ status: 204, description: 'Cart cleared successfully.' })
     @ApiResponse({ status: 404, description: 'User not found.' })
     @ApiParam({ name: 'userId', description: 'ID of the user whose cart will be cleared' })
 
-    async clearCart(@Param('userId', ParseIntPipe) id: number): Promise<void> {
-        await this.cartItemService.clearCart(id);
+    async clearCart(@Param('userId', ParseIntPipe) userId: number): Promise<void> {
+        await this.cartItemService.clearCart(userId);
     }
 
     @Patch(':id')
-    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Update the quantity of an item in the cart' })
     @ApiResponse({ status: 200, description: 'Item quantity updated', type: CartItemDto })
     @ApiResponse({ status: 404, description: 'Item not found.' })
@@ -58,16 +54,15 @@ export class CartItemController {
     @ApiBody({ type: PatchCartItemDto, description: 'Updated quantity for the cart item' })
     async updateQuantity(
         @Param('id', ParseIntPipe) id: number,
-        @Body('quantity') quantity: number,
+        @Body() patchCartItemDto: PatchCartItemDto
     ): Promise<CartItem> {
-        return this.cartItemService.updateQuantity(id, quantity);
+        return this.cartItemService.updateQuantity(id, patchCartItemDto.quantity);
     }
 
     @Get(':userId')
-    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Get all items in the cart for a user' })
     @ApiResponse({ status: 200, description: 'List of cart items', type: [CartItemDto] })
-    @ApiResponse({ status: 404, description: 'Item not found.' })
+    @ApiResponse({ status: 404, description: 'Cart items not found.' })
     @ApiParam({ name: 'userId', description: 'ID of the user whose cart items are to be retrieved' })
     async getCartItems(@Param('userId', ParseIntPipe) userId: number): Promise<CartItem[]> {
         return await this.cartItemService.getCartItems(userId);
