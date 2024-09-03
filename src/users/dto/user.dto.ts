@@ -1,25 +1,27 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UserDto {
-    @ApiProperty({ example: 1, description: 'User ID' })
+    @ApiProperty({ example: 1, description: 'Unique identifier for the user' })
     id: number;
 
-    @ApiProperty({ example: 'user@domain.com', description: 'Email address of the user' })
+    @ApiProperty({ example: 'Matilda_Brekke@hotmail.com', description: 'Email address of the user' })
     email: string;
 
-    @ApiProperty({ example: 'John Doe', description: 'Name of the user' })
+    @ApiProperty({ example: 'Mxpv4Yt7xJhPNvp', description: 'Hashed password of the user' })
+    password: string;
+
+    @ApiProperty({ example: 'John Doe', description: 'Full name of the user' })
     name: string;
 
-    @ApiProperty({ example: '2023-08-18T00:00:00Z', description: 'Date and time when the user was created' })
+    @ApiProperty({ example: null, description: 'Google ID if the user signed up with Google' })
+    googleId: string | null;
+
+    @ApiProperty({ example: null, description: 'Facebook ID if the user signed up with Facebook' })
+    facebookId: string | null;
+
+    @ApiProperty({ example: '2024-08-30T23:58:25.172Z', description: 'Timestamp when the user was created' })
     createdAt: Date;
 
-    @ApiProperty({ example: '2024-08-18T00:00:00Z', description: 'Date and time when the user was last updated' })
+    @ApiProperty({ example: '2024-08-31T00:46:08.383Z', description: 'Timestamp when the user was last updated' })
     updatedAt: Date;
-
-    @ApiProperty({ example: 'abc123', description: 'Google ID if available', nullable: true })
-    googleId?: string;
-
-    @ApiProperty({ example: 'def456', description: 'Facebook ID if available', nullable: true })
-    facebookId?: string;
-
 }
