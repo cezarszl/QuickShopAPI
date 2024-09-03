@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, ParseIntPipe, HttpCode, UseGuards, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, ParseIntPipe, HttpCode, UseGuards, Query, UsePipes, ValidationPipe, BadRequestException } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Product } from '@prisma/client';
 import { ApiTags, ApiBody, ApiParam, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
@@ -63,7 +63,7 @@ export class ProductController {
 
     @ApiOperation({ summary: 'Update an existing product' })
     @ApiParam({ name: 'id', description: 'Unique identifier of the product to update', type: Number })
-    @ApiBody({ type: UpdateProductDto })
+    @ApiBody({ type: CreateProductDto })
     @ApiResponse({ status: 200, description: 'The product has been successfully updated.', type: ProductDto })
     @ApiResponse({ status: 404, description: 'Product not found' })
     @Put(':id')
