@@ -54,9 +54,10 @@ export class AuthController {
         status: 401,
         description: 'Unauthorized: Invalid credentials.',
     })
-    async login(@Body() loginDto: LoginDto): Promise<string> {
+    async login(@Body() loginDto: LoginDto): Promise<{ access_token: string }> {
         try {
-            return await this.authService.login(loginDto);
+            const jwtToken = await this.authService.login(loginDto);
+            return { access_token: jwtToken };
         } catch (error) {
             if (error instanceof UnauthorizedException) {
                 throw new UnauthorizedException('Invalid credentials');
@@ -73,18 +74,14 @@ export class AuthController {
 
     }
 
-    // 2. Endpoint do obsługi callbacku od Google
     @Get('google/callback')
     @UseGuards(GoogleAuthGuard)
     @ApiOperation({ summary: 'Handle Google OAuth2 callback' })
     @ApiResponse({ status: 200, description: 'Returns JWT token after successful Google login.' })
     googleAuthRedirect(@Req() req) {
 
-        // Tutaj otrzymujesz token JWT z req.user, który jest zwracany z metody done w GoogleStrategy
         const jwtToken = req.user;
         return { access_token: jwtToken };
-        // const user = req.user;
-        // return this.authService.login(user);
     }
 
 }
