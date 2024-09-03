@@ -6,7 +6,7 @@ export class LoginDto {
         description: 'Email of the user',
         example: 'user@example.com',
     })
-    @IsEmail()
+    @IsEmail({}, { message: 'Invalid email format' })
     email: string;
 
     @ApiProperty({
@@ -14,7 +14,7 @@ export class LoginDto {
         example: 'P@ssw0rd',
         minLength: 6,
     })
-    @IsString()
-    // @MinLength(6) // Optional: Ensure that password has a minimum length
+    @IsString({ message: 'Password must be a string' })
+    @MinLength(6, { message: 'Password must be at least 6 characters long' })
     password: string;
 }
