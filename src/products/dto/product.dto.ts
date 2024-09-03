@@ -4,6 +4,9 @@ export class ProductDto {
     @ApiProperty({ example: 1, description: 'Product ID' })
     id: number;
 
+    @ApiProperty({ example: 'Category', description: 'Category of the product' })
+    category: string;
+
     @ApiProperty({ example: 'New Product', description: 'Name of the product' })
     name: string;
 

@@ -9,6 +9,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('products')
 @ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('product')
 export class ProductController {
     constructor(private readonly productService: ProductService) { }
@@ -21,7 +22,6 @@ export class ProductController {
     @ApiQuery({ name: 'maxPrice', required: false, type: Number })
     @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Limit the number of products returned' })
     @ApiQuery({ name: 'offset', required: false, type: Number, description: 'Skip the first N products' })
-    @UseGuards(JwtAuthGuard)
     @Get()
     async findAll(
         @Query('category') category?: string,
@@ -47,7 +47,6 @@ export class ProductController {
     @ApiParam({ name: 'id', description: 'Unique identifier of the product', type: Number })
     @ApiResponse({ status: 200, description: 'Product details', type: ProductDto })
     @ApiResponse({ status: 404, description: 'Product not found' })
-    @UseGuards(JwtAuthGuard)
     @Get(':id')
     async findOne(@Param('id', ParseIntPipe) id: number): Promise<Product> {
         return await this.productService.findOne(id);
@@ -57,9 +56,8 @@ export class ProductController {
     @ApiBody({ type: CreateProductDto })
     @ApiResponse({ status: 201, description: 'The product has been successfully created.', type: ProductDto })
     @ApiResponse({ status: 400, description: 'Invalid input data.' })
-    @UseGuards(JwtAuthGuard)
     @Post()
-    async create(@Body() createProductDto: { category: string, name: string; description: string; imageUrl: string; price: number; ownerId?: number }): Promise<Product> {
+    async create(@Body() createProductDto: CreateProductDto): Promise<Product> {
         return this.productService.create(createProductDto);
     }
 
@@ -68,11 +66,10 @@ export class ProductController {
     @ApiBody({ type: UpdateProductDto })
     @ApiResponse({ status: 200, description: 'The product has been successfully updated.', type: ProductDto })
     @ApiResponse({ status: 404, description: 'Product not found' })
-    @UseGuards(JwtAuthGuard)
     @Put(':id')
     async update(
         @Param('id', ParseIntPipe) id: number,
-        @Body() updateProductDto: { name?: string; description?: string; imageUrl?: string; price?: number },
+        @Body() updateProductDto: UpdateProductDto,
     ): Promise<Product> {
         return await this.productService.update(id, updateProductDto);
     }
@@ -82,7 +79,6 @@ export class ProductController {
     @ApiResponse({ status: 204, description: 'The product has been successfully deleted.' })
     @ApiResponse({ status: 404, description: 'Product not found' })
     @HttpCode(204)
-    @UseGuards(JwtAuthGuard)
     @Delete(':id')
     async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
         await this.productService.delete(id);
