@@ -25,8 +25,8 @@ export class UserService {
             where: { id }
         });
 
-        if (existingUser) {
-            throw new ConflictException(`User with email ${id} already exists.`)
+        if (!existingUser) {
+            throw new NotFoundException(`User with id ${id} does not exist.`)
         }
     }
 
