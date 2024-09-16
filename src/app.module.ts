@@ -11,10 +11,12 @@ import { CartItemController } from './cart-items/cart-item.controller';
 import { AuthModule } from './auth/auth.module';
 import { OrderController } from './orders/order.controller';
 import { OrderService } from './orders/order.service';
+import { PaymentsController } from './payments/payments.controller';
+import { PaymentsService } from './payments/payments.service';
 
 @Module({
   imports: [AuthModule],
-  controllers: [AppController, ProductController, UserController, CartItemController, OrderController],
-  providers: [AppService, ProductService, PrismaService, UserService, CartItemService, OrderService],
+  controllers: [AppController, ProductController, UserController, CartItemController, OrderController, PaymentsController],
+  providers: [AppService, ProductService, PrismaService, UserService, CartItemService, OrderService, PaymentsService],
 })
 export class AppModule { }
