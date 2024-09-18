@@ -2,7 +2,7 @@
 
 ## Overview
 
-QuickShop API is a RESTful API built using NestJS and Prisma that allows users to manage products, users, and cart items within a shop. It provides endpoints for creating, reading, updating, and deleting products, users, and managing cart items. The API also includes authentication with JWT and Google OAuth2.
+QuickShop API is a RESTful API built using NestJS and Prisma that allows users to manage products, users, orders, and cart items within a shop. It provides endpoints for creating, reading, updating, and deleting products, users, managing cart items, and handling orders. The API also includes authentication with JWT and Google OAuth2, along with payment integration using Stripe.
 
 ## Features
 
@@ -19,6 +19,15 @@ QuickShop API is a RESTful API built using NestJS and Prisma that allows users t
   - Update the quantity of items in the cart.
   - Retrieve all items in the cart for a specific user.
 
+- **Order Management**:
+  - Create and process new orders.
+  - Retrieve order details for users.
+  - Handle order status updates.
+
+- **Payment Integration**:
+  - Handle payments using Stripe API.
+  - Endpoint to initiate payments with fake data or demo Stripe payments.
+
 - **Authentication**:
   - JWT-based authentication.
   - Google OAuth2 login and registration.
@@ -27,11 +36,11 @@ QuickShop API is a RESTful API built using NestJS and Prisma that allows users t
   - Prisma is used as the ORM to interact with the database.
 
 - **Swagger Documentation**: 
-  - API documentation generated using Swagger.
+  - API documentation generated using Swagger for better development and testing.
 
 ## Documentation
 
-[QuickShopAPI](https://quickshopapi-844fd64d6465.herokuapp.com/api) - See docs online.
+[QuickShop API Swagger Docs](https://quickshopapi-844fd64d6465.herokuapp.com/api) - See full API documentation online.
 
 ## Progress Tracking
 
@@ -41,4 +50,5 @@ You can track the progress of this project on [Trello](https://trello.com/invite
 
 - [NestJS](https://nestjs.com/) - A progressive Node.js framework for building efficient, reliable, and scalable server-side applications.
 - [Prisma](https://www.prisma.io/) - A next-generation ORM that can be used to build GraphQL, REST, and gRPC APIs.
+- [Stripe](https://stripe.com/) - Payment processing for handling online payments.
 - [Swagger](https://swagger.io/) - Used for API documentation.
