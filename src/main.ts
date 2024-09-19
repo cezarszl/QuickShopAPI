@@ -19,7 +19,7 @@ async function bootstrap() {
 
   app.use(passport.initialize());
   app.useGlobalPipes(new ValidationPipe({ transform: true, forbidNonWhitelisted: true, whitelist: true }))
-
+  app.enableCors();
   await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
