@@ -8,8 +8,6 @@ import { UpdateProductDto } from './dto/update.product.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('products')
-@ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
 @Controller('product')
 export class ProductController {
     constructor(private readonly productService: ProductService) { }
@@ -52,6 +50,8 @@ export class ProductController {
         return await this.productService.findOne(id);
     }
 
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Create a new product' })
     @ApiBody({ type: CreateProductDto })
     @ApiResponse({ status: 201, description: 'The product has been successfully created.', type: ProductDto })
@@ -61,6 +61,8 @@ export class ProductController {
         return this.productService.create(createProductDto);
     }
 
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Update an existing product' })
     @ApiParam({ name: 'id', description: 'Unique identifier of the product to update', type: Number })
     @ApiBody({ type: CreateProductDto })
@@ -74,6 +76,8 @@ export class ProductController {
         return await this.productService.update(id, updateProductDto);
     }
 
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Delete a product by ID' })
     @ApiParam({ name: 'id', description: 'Unique identifier of the product to delete', type: Number })
     @ApiResponse({ status: 204, description: 'The product has been successfully deleted.' })
