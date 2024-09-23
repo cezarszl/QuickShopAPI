@@ -13,10 +13,11 @@ import { OrderController } from './orders/order.controller';
 import { OrderService } from './orders/order.service';
 import { PaymentsController } from './payments/payments.controller';
 import { PaymentsService } from './payments/payments.service';
+import { CategoryService } from './category/category.service';
 
 @Module({
   imports: [AuthModule],
   controllers: [AppController, ProductController, UserController, CartItemController, OrderController, PaymentsController],
-  providers: [AppService, ProductService, PrismaService, UserService, CartItemService, OrderService, PaymentsService],
+  providers: [AppService, ProductService, PrismaService, UserService, CartItemService, OrderService, PaymentsService, CategoryService],
 })
 export class AppModule { }
