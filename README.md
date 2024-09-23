@@ -35,10 +35,10 @@ QuickShop API is a RESTful API built using NestJS and Prisma that allows users t
 - API documentation generated using Swagger for better development and testing.
 
 ## Documentation
-QuickShop API Swagger Docs - See full API documentation online.
+- [QuickShop API Swagger Docs](https://quickshopapi-844fd64d6465.herokuapp.com/api) - See full API documentation online.
 
 ## Progress Tracking
-You can track the progress of this project on Trello.
+- You can track the progress of this project on [Trello](https://trello.com/invite/b/66d020cfa5c358f331c3c2f8/ATTId951596145cea872dad191e72980677377CA810F/quickshop-api).
 
 ## Technologies
 - **NestJS** - A progressive Node.js framework for building efficient, reliable, and scalable server-side applications.
