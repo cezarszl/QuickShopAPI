@@ -14,10 +14,11 @@ import { OrderService } from './orders/order.service';
 import { PaymentsController } from './payments/payments.controller';
 import { PaymentsService } from './payments/payments.service';
 import { CategoryService } from './category/category.service';
+import { CategoryController } from './category/category.controller';
 
 @Module({
   imports: [AuthModule],
-  controllers: [AppController, ProductController, UserController, CartItemController, OrderController, PaymentsController],
+  controllers: [AppController, ProductController, UserController, CartItemController, OrderController, PaymentsController, CategoryController],
   providers: [AppService, ProductService, PrismaService, UserService, CartItemService, OrderService, PaymentsService, CategoryService],
 })
 export class AppModule { }
