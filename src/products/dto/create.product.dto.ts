@@ -1,11 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsNumber, IsUrl } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsNotEmpty, IsString, IsNumber, IsUrl, ValidateNested } from 'class-validator';
+import { ConnectCategoryDto } from 'src/products/dto/connect-category.dto';
 
 export class CreateProductDto {
-    @ApiProperty({ example: 'Bronze', description: 'Category of the product' })
+    @ApiProperty({ type: ConnectCategoryDto, description: 'Category of the product' })
     @IsNotEmpty({ message: 'Category is required' })
-    @IsString({ message: 'Category must be a string' })
-    category: string;
+    @ValidateNested()
+    @Type(() => ConnectCategoryDto)
+    category: ConnectCategoryDto;
 
     @ApiProperty({ example: 'New Product', description: 'Name of the product' })
     @IsNotEmpty({ message: 'Name is required' })
