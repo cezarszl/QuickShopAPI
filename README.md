@@ -1,5 +1,5 @@
 # Overview
-QuickShop API is a RESTful API built using NestJS and Prisma that allows users to manage products, users, orders, and cart items within a shop. It provides endpoints for creating, reading, updating, and deleting products, users, managing cart items, and handling orders. The API also includes authentication with JWT and Google OAuth2, along with payment integration using Stripe. The application is deployed using Docker, with PostgreSQL running as the database.
+QuickShop API is a RESTful API built using NestJS and Prisma that allows users to manage products, users, orders, and cart items within a shop. It provides endpoints for creating, reading, updating, and deleting products, users, managing cart items, and handling orders. The API also includes authentication with JWT and Google OAuth2, along with payment integration using Stripe. The application is using Docker, with PostgreSQL running as the database.
 
 ## Features
 ### User Management:
