@@ -1,0 +1,284 @@
+[
+  {
+    "name": "Smartphone X12",
+    "price": 299.99,
+    "category": "electronics",
+    "description": "High-performance smartphone with a 6.5-inch display and 128GB storage."
+  },
+  {
+    "name": "Laptop Ultra 15",
+    "price": 1099.99,
+    "category": "electronics",
+    "description": "Powerful laptop with 16GB RAM, 512GB SSD, and a 15.6-inch Full HD display."
+  },
+  {
+    "name": "Wireless Headphones Pro",
+    "price": 199.99,
+    "category": "electronics",
+    "description": "Noise-cancelling wireless headphones with up to 20 hours of battery life."
+  },
+  {
+    "name": "4K OLED TV",
+    "price": 1499.99,
+    "category": "electronics",
+    "description": "55-inch 4K OLED TV with HDR and smart features for streaming apps."
+  },
+  {
+    "name": "Bluetooth Speaker X",
+    "price": 79.99,
+    "category": "electronics",
+    "description": "Portable Bluetooth speaker with deep bass and water-resistant design."
+  },
+  {
+    "name": "Smartwatch G5",
+    "price": 249.99,
+    "category": "electronics",
+    "description": "Advanced smartwatch with heart rate monitoring and fitness tracking."
+  },
+  {
+    "name": "Gaming Console Z",
+    "price": 499.99,
+    "category": "electronics",
+    "description": "Next-gen gaming console with 4K graphics and a wide range of games."
+  },
+  {
+    "name": "Digital Camera Pro",
+    "price": 899.99,
+    "category": "electronics",
+    "description": "Professional digital camera with 24MP sensor and 4K video recording."
+  },
+  {
+    "name": "Tablet 10.5",
+    "price": 399.99,
+    "category": "electronics",
+    "description": "10.5-inch tablet with a high-resolution display and 64GB storage."
+  },
+  {
+    "name": "Smart Home Hub",
+    "price": 129.99,
+    "category": "electronics",
+    "description": "Control your smart home devices with voice commands and automation."
+  },
+  {
+    "name": "Men's Leather Jacket",
+    "price": 199.99,
+    "category": "clothing",
+    "description": "Stylish leather jacket made from premium materials for a rugged look."
+  },
+  {
+    "name": "Women's Summer Dress",
+    "price": 49.99,
+    "category": "clothing",
+    "description": "Lightweight, breathable summer dress with a floral pattern."
+  },
+  {
+    "name": "Running Shoes X",
+    "price": 89.99,
+    "category": "clothing",
+    "description": "Comfortable running shoes with excellent support and cushioning."
+  },
+  {
+    "name": "Winter Coat Deluxe",
+    "price": 299.99,
+    "category": "clothing",
+    "description": "Warm winter coat with a water-resistant exterior and faux fur lining."
+  },
+  {
+    "name": "Casual T-Shirt",
+    "price": 19.99,
+    "category": "clothing",
+    "description": "Basic cotton t-shirt available in multiple colors."
+  },
+  {
+    "name": "Jeans Slim Fit",
+    "price": 69.99,
+    "category": "clothing",
+    "description": "Slim-fit jeans with a modern cut and durable fabric."
+  },
+  {
+    "name": "Women's Silk Scarf",
+    "price": 39.99,
+    "category": "clothing",
+    "description": "Elegant silk scarf available in vibrant colors and patterns."
+  },
+  {
+    "name": "Men's Wool Sweater",
+    "price": 79.99,
+    "category": "clothing",
+    "description": "Cozy wool sweater perfect for cooler weather."
+  },
+  {
+    "name": "Sports Jacket",
+    "price": 129.99,
+    "category": "clothing",
+    "description": "Lightweight sports jacket for outdoor activities, wind-resistant."
+  },
+  {
+    "name": "Yoga Pants",
+    "price": 49.99,
+    "category": "clothing",
+    "description": "Stretchy and comfortable yoga pants for fitness and relaxation."
+  },
+  {
+    "name": "The Time Traveler",
+    "price": 14.99,
+    "category": "books",
+    "description": "A thrilling science fiction novel about time travel and adventure."
+  },
+  {
+    "name": "Mastering JavaScript",
+    "price": 29.99,
+    "category": "books",
+    "description": "Comprehensive guide to learning JavaScript for web development."
+  },
+  {
+    "name": "Historical Tales",
+    "price": 19.99,
+    "category": "books",
+    "description": "A collection of fascinating stories from history."
+  },
+  {
+    "name": "Fantasy World",
+    "price": 24.99,
+    "category": "books",
+    "description": "An epic fantasy novel set in a world of magic and dragons."
+  },
+  {
+    "name": "Self Improvement Guide",
+    "price": 12.99,
+    "category": "books",
+    "description": "Practical tips and advice for personal growth and success."
+  },
+  {
+    "name": "Beginner's Guide to Yoga",
+    "price": 16.99,
+    "category": "books",
+    "description": "Step-by-step guide to yoga for beginners, with illustrations."
+  },
+  {
+    "name": "The Science of Happiness",
+    "price": 22.99,
+    "category": "books",
+    "description": "Exploring the psychology behind happiness and well-being."
+  },
+  {
+    "name": "Children's Adventure",
+    "price": 9.99,
+    "category": "books",
+    "description": "A fun and exciting story for young readers."
+  },
+  {
+    "name": "Poetry of the Heart",
+    "price": 18.99,
+    "category": "books",
+    "description": "A collection of heartfelt poems about love and life."
+  },
+  {
+    "name": "Mystery in the Woods",
+    "price": 13.99,
+    "category": "books",
+    "description": "A suspenseful mystery novel set in a remote forest."
+  },
+  {
+    "name": "Lego City Set",
+    "price": 49.99,
+    "category": "toys",
+    "description": "Build your own city with this detailed Lego set."
+  },
+  {
+    "name": "Remote Control Car",
+    "price": 39.99,
+    "category": "toys",
+    "description": "Fast and fun remote control car with rechargeable batteries."
+  },
+  {
+    "name": "Plush Teddy Bear",
+    "price": 24.99,
+    "category": "toys",
+    "description": "Soft and cuddly teddy bear perfect for children of all ages."
+  },
+  {
+    "name": "Action Figure Hero",
+    "price": 19.99,
+    "category": "toys",
+    "description": "Poseable action figure based on popular superhero characters."
+  },
+  {
+    "name": "Wooden Puzzle Set",
+    "price": 29.99,
+    "category": "toys",
+    "description": "Challenging and fun wooden puzzle set for kids."
+  },
+  {
+    "name": "Dollhouse Deluxe",
+    "price": 99.99,
+    "category": "toys",
+    "description": "A large and detailed dollhouse with furniture and accessories."
+  },
+  {
+    "name": "Train Set Classic",
+    "price": 59.99,
+    "category": "toys",
+    "description": "Classic train set with tracks and a battery-powered engine."
+  },
+  {
+    "name": "Kids' Coloring Set",
+    "price": 14.99,
+    "category": "toys",
+    "description": "Includes coloring books, crayons, and markers for creative fun."
+  },
+  {
+    "name": "Interactive Robot",
+    "price": 89.99,
+    "category": "toys",
+    "description": "Programmable robot with interactive games and activities."
+  },
+  {
+    "name": "Building Blocks Kit",
+    "price": 34.99,
+    "category": "toys",
+    "description": "A kit of building blocks to create various structures."
+  },
+  {
+    "name": "Modern Coffee Table",
+    "price": 199.99,
+    "category": "furniture",
+    "description": "Sleek and modern coffee table with a glass top."
+  },
+  {
+    "name": "Ergonomic Office Chair",
+    "price": 249.99,
+    "category": "furniture",
+    "description": "Comfortable and supportive office chair with adjustable height."
+  },
+  {
+    "name": "Dining Table Set",
+    "price": 599.99,
+    "category": "furniture",
+    "description": "Stylish dining table set with four chairs, made from solid wood."
+  },
+  {
+    "name": "Queen Bed Frame",
+    "price": 399.99,
+    "category": "furniture",
+    "description": "Sturdy queen-size bed frame with a modern design."
+  },
+  {
+    "name": "Bookshelf Tower",
+    "price": 149.99,
+    "category": "furniture",
+    "description": "Tall bookshelf with multiple shelves for organizing books and decor."
+  },
+  {
+    "name": "Recliner Chair",
+    "price": 349.99,
+    "category": "furniture",
+    "description": "Comfortable recliner chair with soft padding and adjustable positions."
+  },
+  {
+    "name": "Wooden Desk",
+    "price": 279.99,
+    "category": "furniture",
+    "description": "Spacious wooden desk with drawers, perfect for a home office."
+  }
+]
