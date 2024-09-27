@@ -36,6 +36,7 @@
     "class-validator": "^0.14.1",
     "controller": "^1.0.0",
     "mapped-types": "^0.0.1",
+    "openai": "^4.65.0",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
