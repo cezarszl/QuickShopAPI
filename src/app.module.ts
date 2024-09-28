@@ -15,9 +15,17 @@ import { PaymentsController } from './payments/payments.controller';
 import { PaymentsService } from './payments/payments.service';
 import { CategoryService } from './category/category.service';
 import { CategoryController } from './category/category.controller';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, ServeStaticModule.forRoot({
+    rootPath: join(process.cwd(), 'assets', 'images'),
+    serveRoot: '/images',
+    serveStaticOptions: {
+      index: false,
+    },
+  }),],
   controllers: [AppController, ProductController, UserController, CartItemController, OrderController, PaymentsController, CategoryController],
   providers: [AppService, ProductService, PrismaService, UserService, CartItemService, OrderService, PaymentsService, CategoryService],
 })
