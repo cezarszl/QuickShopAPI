@@ -4,9 +4,6 @@ export class ProductDto {
     @ApiProperty({ example: 1, description: 'Product ID' })
     id: number;
 
-    @ApiProperty({ example: 'Category', description: 'Category of the product' })
-    category: string;
-
     @ApiProperty({ example: 'New Product', description: 'Name of the product' })
     name: string;
 
@@ -24,6 +21,9 @@ export class ProductDto {
 
     @ApiProperty({ example: '2024-08-18T00:00:00Z', description: 'Date and time when the product was last updated' })
     updatedAt: Date;
+
+    @ApiProperty({ example: 3, description: 'ID of the category' })
+    categoryId: number;
 
     @ApiProperty({ example: 1, description: 'User ID of the product owner', nullable: true })
     ownerId?: number;
