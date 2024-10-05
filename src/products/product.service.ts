@@ -9,7 +9,7 @@ export class ProductService {
     constructor(private readonly prisma: PrismaService) { }
 
     async findAll(filters: {
-        category?: string;
+        category?: number;
         name?: string;
         minPrice?: number;
         maxPrice?: number;
@@ -21,7 +21,7 @@ export class ProductService {
         const where: any = {};
 
         if (category)
-            where.category = category;
+            where.categoryId = category;
 
         if (name) {
             where.name = {

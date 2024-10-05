@@ -14,15 +14,15 @@ export class ProductController {
 
     @ApiOperation({ summary: 'Retrieve all products' })
     @ApiResponse({ status: 200, description: 'List of all products', type: [ProductDto] })
-    @ApiQuery({ name: 'category', required: false, type: String })
     @ApiQuery({ name: 'name', required: false, type: String })
+    @ApiQuery({ name: 'category', required: false, type: Number })
     @ApiQuery({ name: 'minPrice', required: false, type: Number })
     @ApiQuery({ name: 'maxPrice', required: false, type: Number })
     @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Limit the number of products returned' })
     @ApiQuery({ name: 'offset', required: false, type: Number, description: 'Skip the first N products' })
     @Get()
     async findAll(
-        @Query('category') category?: string,
+        @Query('category') category?: number,
         @Query('name') name?: string,
         @Query('minPrice') minPrice?: string,
         @Query('maxPrice') maxPrice?: string,
