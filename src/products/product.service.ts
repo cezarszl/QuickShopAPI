@@ -1,13 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { Product } from '@prisma/client';
 import { CreateProductDto } from './dto/create.product.dto';
 import { UpdateProductDto } from './dto/update.product.dto';
 
+
 @Injectable()
 export class ProductService {
     constructor(private readonly prisma: PrismaService) { }
 
+    // Find all products based on filters
     async findAll(filters: {
         category?: number;
         name?: string;
@@ -45,6 +47,7 @@ export class ProductService {
         });
     }
 
+    // Find specific product by id
     async findOne(id: number): Promise<Product> {
         const product = await this.prisma.product.findUnique({
             where: { id },
@@ -55,12 +58,14 @@ export class ProductService {
         return product;
     }
 
+    // Create a product
     async create(createProductDto: CreateProductDto): Promise<Product> {
         return this.prisma.product.create({
             data: createProductDto
         });
     }
 
+    // Delete a product by id
     async delete(id: number): Promise<void> {
         try {
             await this.prisma.product.delete({
@@ -71,8 +76,8 @@ export class ProductService {
         }
     }
 
-    async update(id: number, updateProductDto: UpdateProductDto
-    ): Promise<Product> {
+    // Update a product by id
+    async update(id: number, updateProductDto: UpdateProductDto): Promise<Product> {
         try {
             return await this.prisma.product.update({
                 where: { id },
@@ -81,5 +86,23 @@ export class ProductService {
         } catch (error) {
             throw new NotFoundException(`Product with ID ${id} not found`);
         }
+    }
+
+    // Get random product from each category
+    async getRandomProductsByCategory() {
+        const categories = await this.prisma.category.findMany({
+            include: { products: true },
+        });
+
+        const randomProducts = categories.map(category => {
+            const products = category.products;
+            if (products.length > 0) {
+                const randomIndex = Math.floor(Math.random() * products.length);
+                return products[randomIndex];
+            }
+            return null;
+        });
+
+        return randomProducts.filter(product => product !== null);
     }
 }
