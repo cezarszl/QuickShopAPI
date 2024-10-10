@@ -38,4 +38,8 @@ export class ProductDto {
     @IsOptional()
     @IsNumber()
     ownerId?: number;
+
+    @ApiProperty({ example: 'electornics', description: 'Name of category' })
+    @IsString()
+    categoryName: string;
 }

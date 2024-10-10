@@ -4,6 +4,10 @@ import { Product } from '@prisma/client';
 import { CreateProductDto } from './dto/create.product.dto';
 import { UpdateProductDto } from './dto/update.product.dto';
 
+type ProductWithCategoryName = Product & {
+    categoryName?: string | null;
+    category?: undefined
+}
 
 @Injectable()
 export class ProductService {
@@ -48,14 +52,19 @@ export class ProductService {
     }
 
     // Find specific product by id
-    async findOne(id: number): Promise<Product> {
+    async findOne(id: number): Promise<ProductWithCategoryName> {
         const product = await this.prisma.product.findUnique({
             where: { id },
+            include: { category: true }
         });
         if (!product) {
             throw new NotFoundException(`Product with ID ${id} not found`);
         }
-        return product;
+        return {
+            ...product,
+            categoryName: product.category?.name || null,
+            category: undefined
+        };
     }
 
     // Create a product
@@ -89,7 +98,7 @@ export class ProductService {
     }
 
     // Get random product from each category
-    async getRandomProductsByCategory() {
+    async getRandomProductsByCategory(): Promise<ProductWithCategoryName[]> {
         const categories = await this.prisma.category.findMany({
             include: { products: true },
         });
