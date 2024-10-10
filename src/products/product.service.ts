@@ -98,7 +98,11 @@ export class ProductService {
             const products = category.products;
             if (products.length > 0) {
                 const randomIndex = Math.floor(Math.random() * products.length);
-                return products[randomIndex];
+                const randomProduct = products[randomIndex];
+                return {
+                    ...randomProduct,
+                    categoryName: category.name
+                };
             }
             return null;
         });
