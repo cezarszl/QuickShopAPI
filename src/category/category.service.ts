@@ -34,7 +34,7 @@ export class CategoryService {
         });
     }
 
-    async getMinPricesByCategory(): Promise<{ categoryId: number, minPrice: number }[]> {
+    async getLowestPricesFromEachCategory(): Promise<{ categoryId: number, minPrice: number }[]> {
         const minPrices = await this.prisma.category.findMany({
             include: {
                 products: {

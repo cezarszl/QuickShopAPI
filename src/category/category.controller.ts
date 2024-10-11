@@ -14,8 +14,8 @@ export class CategoryController {
     @Get('min-prices')
     @ApiOperation({ summary: 'Get minimum price from each category' })
     @ApiResponse({ status: 200, description: 'Successfully retrieved minimum prices.' })
-    async getMinPricesByCategory() {
-        return this.categoryService.getMinPricesByCategory();
+    async getLowestPricesFromEachCategory() {
+        return this.categoryService.getLowestPricesFromEachCategory();
     }
 
     @Get()
