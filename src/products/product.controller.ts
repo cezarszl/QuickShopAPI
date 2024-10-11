@@ -42,13 +42,15 @@ export class ProductController {
         return this.productService.findAll(filters);
     }
 
+
+
     // Get random product from each category
     @Get('random-products')
     @ApiOperation({ summary: 'Get a random product from each category' })
     @ApiResponse({ status: 200, description: 'Array of random products from each category', type: [ProductDto] })
     @ApiResponse({ status: 500, description: 'Internal server error' })
-    async getRandomProducts(): Promise<Product[]> {
-        return this.productService.getRandomProductsByCategory();
+    async getRandomProductsFromEachCategory(): Promise<Product[]> {
+        return this.productService.getRandomProductsFromEachCategory();
     }
 
 
