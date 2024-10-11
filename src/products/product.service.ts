@@ -118,24 +118,4 @@ export class ProductService {
 
         return randomProducts.filter(product => product !== null);
     }
-
-    async getMinPricesByCategory(): Promise<{ categoryId: number, minPrice: number }[]> {
-        const minPrices = await this.prisma.category.findMany({
-            include: {
-                products: {
-                    select: {
-                        price: true,
-                    },
-                    orderBy: { price: 'asc' },
-                    take: 1
-                },
-            },
-        });
-
-        return minPrices.map(category => ({
-            categoryId: category.id,
-            minPrice: category.products[0]?.price ?? 0,
-        }));
-    }
-
 }
