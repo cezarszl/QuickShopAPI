@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Running Sneakers",
+    "price": 89.99,
+    "category": "shoes",
+    "description": "Lightweight running sneakers with breathable mesh and cushioned soles for comfort."
+  },
+  {
+    "name": "Leather Dress Shoes",
+    "price": 129.99,
+    "category": "shoes",
+    "description": "Elegant leather dress shoes, perfect for formal occasions and business wear."
+  },
+  {
+    "name": "Casual Slip-On Shoes",
+    "price": 59.99,
+    "category": "shoes",
+    "description": "Comfortable and stylish slip-on shoes with a flexible sole, ideal for everyday use."
+  },
+  {
+    "name": "Hiking Boots",
+    "price": 149.99,
+    "category": "shoes",
+    "description": "Durable hiking boots with waterproof material and a high-traction outsole for outdoor adventures."
+  },
+  {
+    "name": "Canvas Sneakers",
+    "price": 49.99,
+    "category": "shoes",
+    "description": "Classic canvas sneakers with a rubber sole, great for casual outfits and weekend wear."
+  }
+]

@@ -3,7 +3,8 @@ import OpenAI from 'openai';
 import axios from 'axios';
 import * as fs from 'fs';
 import * as path from 'path';
-const products = require('./fakeProducts.json');
+// const products = require('./fakeProducts.json');
+const products = require('./fakeProducts_newcategory.json');
 
 const prisma = new PrismaClient();
 
