@@ -10,7 +10,7 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 
 
 @ApiTags('users')
-@Controller('user')
+@Controller('users')
 @ApiBearerAuth()
 export class UserController {
     constructor(private readonly userService: UserService) { }

@@ -7,7 +7,7 @@ import { OrderDto } from './dto/order.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @ApiTags('orders')
-@Controller('order')
+@Controller('orders')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 export class OrderController {
