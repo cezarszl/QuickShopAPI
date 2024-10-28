@@ -41,8 +41,8 @@ model Product {
   owner       User?      @relation(fields: [ownerId], references: [id])
   ownerId     Int?
   cartItems    CartItem[]
-  brand String
-  color String
+  brand String @default("Unknown Brand")
+  color String  @default("Unknows Color")
 }
 
 model Category {
