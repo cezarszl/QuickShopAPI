@@ -45,7 +45,7 @@
     "remove": "^0.1.5",
     "rxjs": "^7.8.1",
     "stripe": "^16.11.0",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
@@ -73,7 +73,6 @@
     "supertest": "^7.0.0",
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.3",
-    "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.3"
   },
