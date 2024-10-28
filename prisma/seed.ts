@@ -74,7 +74,32 @@ async function seed() {
     console.log('Seeding finished')
 }
 
-seed()
+async function seeedColorsAndBrands() {
+
+
+    const colors = ['RED', 'BLUE', 'ORANGE', 'WHITE', 'BLACK', 'GREY', 'PINK'];
+    const brands = ['South Face', 'Abibas', 'Nuke', 'Sunshine', 'Beebok'];
+
+    const products = await prisma.product.findMany();
+
+    function getRandomElement<T>(arr: T[]): T {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    for (const product of products) {
+        await prisma.product.update({
+            where: { id: product.id },
+            data: {
+                brand: getRandomElement(brands),
+                color: getRandomElement(colors)
+            }
+        });
+    }
+
+}
+
+// seed()
+seeedColorsAndBrands()
     .catch(e => {
         throw e;
     })
