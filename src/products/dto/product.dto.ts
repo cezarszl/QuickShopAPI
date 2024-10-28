@@ -39,7 +39,11 @@ export class ProductDto {
     @IsNumber()
     ownerId?: number;
 
-    @ApiProperty({ example: 'electornics', description: 'Name of category' })
+    @ApiProperty({ example: 'Abibas', description: 'Name of brand' })
     @IsString()
-    categoryName: string;
+    brand: string;
+
+    @ApiProperty({ example: 'RED', description: 'Color of product' })
+    @IsString()
+    color: string;
 }

@@ -30,4 +30,14 @@ export class CreateProductDto {
     @IsNotEmpty({ message: 'Price is required' })
     @IsNumber({}, { message: 'Price must be a number' })
     price: number;
+
+    @ApiProperty({ example: 'Abibas', description: 'Brand of the product' })
+    @IsNotEmpty({ message: 'Brand is required' })
+    @IsString({ message: 'Brand must be a string' })
+    brand: string;
+
+    @ApiProperty({ example: 'RED', description: 'Color of the product' })
+    @IsNotEmpty({ message: 'Color is required' })
+    @IsString({ message: 'Color must be a string' })
+    color: string;
 }
