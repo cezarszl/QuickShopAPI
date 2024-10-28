@@ -41,6 +41,8 @@ model Product {
   owner       User?      @relation(fields: [ownerId], references: [id])
   ownerId     Int?
   cartItems    CartItem[]
+  brand String
+  color String
 }
 
 model Category {
