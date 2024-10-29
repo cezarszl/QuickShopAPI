@@ -76,27 +76,54 @@ async function seed() {
 
 async function seeedColorsAndBrands() {
 
+    // Funkcja pomocnicza do losowania elementu
+    function getRandomElement(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    async function getOrCreateBrand(name) {
+        const brand = await prisma.brand.findUnique({ where: { name } });
+        if (brand) return brand; // Jeśli marka już istnieje, zwróć ją
+
+        // Jeśli nie istnieje, utwórz nową
+        return await prisma.brand.create({ data: { name } });
+    }
+
+    async function getOrCreateColor(name) {
+        const color = await prisma.color.findUnique({ where: { name } });
+        if (color) return color; // Jeśli kolor już istnieje, zwróć go
+
+        // Jeśli nie istnieje, utwórz nowy
+        return await prisma.color.create({ data: { name } });
+    }
 
     const colors = ['RED', 'BLUE', 'ORANGE', 'WHITE', 'BLACK', 'GREY', 'PINK'];
     const brands = ['South Face', 'Abibas', 'Nuke', 'Sunshine', 'Beebok'];
 
-    const products = await prisma.product.findMany();
-
-    function getRandomElement<T>(arr: T[]): T {
-        return arr[Math.floor(Math.random() * arr.length)];
-    }
+    // Iterujemy po wszystkich produktach
+    const products = await prisma.product.findMany(); // Pobierz wszystkie produkty
 
     for (const product of products) {
+        // Losowanie marki i koloru
+        const randomBrandName = getRandomElement(brands);
+        const randomColorName = getRandomElement(colors);
+
+        // Zdobądź lub stwórz nową markę i kolor
+        const brand = await getOrCreateBrand(randomBrandName);
+        const color = await getOrCreateColor(randomColorName);
+
+        // Aktualizuj produkt
         await prisma.product.update({
             where: { id: product.id },
             data: {
-                brand: getRandomElement(brands),
-                color: getRandomElement(colors)
-            }
+                brandId: brand.id, // Przypisanie identyfikatora marki
+                colorId: color.id, // Przypisanie identyfikatora koloru
+            },
         });
     }
-
 }
+
+
 
 // seed()
 seeedColorsAndBrands()
