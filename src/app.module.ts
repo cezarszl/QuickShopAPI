@@ -17,6 +17,10 @@ import { CategoryService } from './category/category.service';
 import { CategoryController } from './category/category.controller';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { BrandService } from './brands/brand.service';
+import { BrandsController } from './brands/brands.controller';
+import { ColorsService } from './colors/colors.service';
+import { ColorsController } from './colors/colors.controller';
 
 @Module({
   imports: [AuthModule, ServeStaticModule.forRoot({
@@ -26,7 +30,7 @@ import { join } from 'path';
       index: false,
     },
   }),],
-  controllers: [AppController, ProductController, UserController, CartItemController, OrderController, PaymentsController, CategoryController],
-  providers: [AppService, ProductService, PrismaService, UserService, CartItemService, OrderService, PaymentsService, CategoryService],
+  controllers: [AppController, ProductController, UserController, CartItemController, OrderController, PaymentsController, CategoryController, BrandsController, ColorsController],
+  providers: [AppService, ProductService, PrismaService, UserService, CartItemService, OrderService, PaymentsService, CategoryService, BrandService, ColorsService],
 })
 export class AppModule { }
