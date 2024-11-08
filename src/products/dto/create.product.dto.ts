@@ -2,13 +2,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNotEmpty, IsString, IsNumber, IsUrl, ValidateNested } from 'class-validator';
 import { ConnectCategoryDto } from 'src/products/dto/connect-category.dto';
+import { ConnectBrandDto } from './connect-brand.dto';
+import { ConnectColorDto } from './connect-color.dto';
 
 export class CreateProductDto {
-    @ApiProperty({ type: ConnectCategoryDto, description: 'Category of the product' })
-    @IsNotEmpty({ message: 'Category is required' })
-    @ValidateNested()
-    @Type(() => ConnectCategoryDto)
-    category: ConnectCategoryDto;
 
     @ApiProperty({ example: 'New Product', description: 'Name of the product' })
     @IsNotEmpty({ message: 'Name is required' })
@@ -31,5 +28,21 @@ export class CreateProductDto {
     @IsNumber({}, { message: 'Price must be a number' })
     price: number;
 
+    @ApiProperty({ type: ConnectCategoryDto, description: 'Category of the product' })
+    @IsNotEmpty({ message: 'Category is required' })
+    @ValidateNested()
+    @Type(() => ConnectCategoryDto)
+    category: ConnectCategoryDto;
 
+    @ApiProperty({ type: ConnectBrandDto, description: 'Brand of the product' })
+    @IsNotEmpty({ message: 'Brand is required' })
+    @ValidateNested()
+    @Type(() => ConnectBrandDto)
+    brand: ConnectBrandDto;
+
+    @ApiProperty({ type: ConnectColorDto, description: 'Brand of the product' })
+    @IsNotEmpty({ message: 'Brand is required' })
+    @ValidateNested()
+    @Type(() => ConnectColorDto)
+    color: ConnectColorDto;
 }
