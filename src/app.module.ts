@@ -13,14 +13,14 @@ import { OrderController } from './orders/order.controller';
 import { OrderService } from './orders/order.service';
 import { PaymentsController } from './payments/payments.controller';
 import { PaymentsService } from './payments/payments.service';
-import { CategoryService } from './category/category.service';
-import { CategoryController } from './category/category.controller';
+import { CategoryService } from './categories/category.service';
+import { CategoryController } from './categories/category.controller';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { BrandService } from './brands/brand.service';
-import { BrandsController } from './brands/brands.controller';
-import { ColorsService } from './colors/colors.service';
-import { ColorsController } from './colors/colors.controller';
+import { BrandController } from './brands/brand.controller';
+import { ColorService } from './colors/color.service';
+import { ColorController } from './colors/color.controller';
 
 @Module({
   imports: [AuthModule, ServeStaticModule.forRoot({
@@ -30,7 +30,7 @@ import { ColorsController } from './colors/colors.controller';
       index: false,
     },
   }),],
-  controllers: [AppController, ProductController, UserController, CartItemController, OrderController, PaymentsController, CategoryController, BrandsController, ColorsController],
-  providers: [AppService, ProductService, PrismaService, UserService, CartItemService, OrderService, PaymentsService, CategoryService, BrandService, ColorsService],
+  controllers: [AppController, ProductController, UserController, CartItemController, OrderController, PaymentsController, CategoryController, BrandController, ColorController],
+  providers: [AppService, ProductService, PrismaService, UserService, CartItemService, OrderService, PaymentsService, CategoryService, BrandService, ColorService],
 })
 export class AppModule { }
