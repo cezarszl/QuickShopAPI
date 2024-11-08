@@ -30,20 +30,21 @@ export class ProductDto {
     @IsDate()
     updatedAt: Date;
 
-    @ApiProperty({ example: 3, description: 'ID of the category' })
-    @IsNumber()
-    categoryId: number;
 
     @ApiProperty({ example: 1, description: 'User ID of the product owner', nullable: true })
     @IsOptional()
     @IsNumber()
     ownerId?: number;
 
-    @ApiProperty({ example: 'Abibas', description: 'Name of brand' })
-    @IsString()
-    brand: string;
+    @ApiProperty({ example: 3, description: 'ID of the category' })
+    @IsNumber()
+    categoryId: number;
 
-    @ApiProperty({ example: 'RED', description: 'Color of product' })
-    @IsString()
-    color: string;
+    @ApiProperty({ example: 1, description: 'ID of the brand' })
+    @IsNumber()
+    brandId: number;
+
+    @ApiProperty({ example: 2, description: 'ID of the color' })
+    @IsNumber()
+    colorId: number;
 }
