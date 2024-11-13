@@ -17,14 +17,14 @@ export class ProductService {
     async findAll(filters: {
         categoryId?: number;
         colorId?: number;
-        brandId?: number;
+        brandIds?: number[];
         name?: string;
         minPrice?: number;
         maxPrice?: number;
         limit?: number;
         offset?: number;
     }): Promise<Product[]> {
-        const { categoryId, colorId, brandId, name, minPrice, maxPrice, limit, offset } = filters;
+        const { categoryId, colorId, brandIds, name, minPrice, maxPrice, limit, offset } = filters;
 
         const where: any = {};
 
@@ -34,8 +34,9 @@ export class ProductService {
         if (colorId)
             where.colorId = colorId;
 
-        if (brandId)
-            where.brandId = brandId;
+        if (brandIds && brandIds.length > 0) {
+            where.brandId = { in: brandIds }
+        }
 
         if (name) {
             where.name = {
