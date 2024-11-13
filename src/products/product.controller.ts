@@ -19,12 +19,16 @@ export class ProductController {
     @ApiResponse({ status: 200, description: 'List of all products', type: [ProductDto] })
     @ApiQuery({ name: 'name', required: false, type: String })
     @ApiQuery({ name: 'categoryId', required: false, type: Number })
+    @ApiQuery({ name: 'colorId', required: false, type: Number })
+    @ApiQuery({ name: 'brandId', required: false, type: Number })
     @ApiQuery({ name: 'minPrice', required: false, type: Number })
     @ApiQuery({ name: 'maxPrice', required: false, type: Number })
     @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Limit the number of products returned' })
     @ApiQuery({ name: 'offset', required: false, type: Number, description: 'Skip the first N products' })
     async findAll(
         @Query('categoryId') categoryId?: number,
+        @Query('colorId') colorId?: number,
+        @Query('brandId') brandId?: number,
         @Query('name') name?: string,
         @Query('minPrice') minPrice?: string,
         @Query('maxPrice') maxPrice?: string,
@@ -33,6 +37,8 @@ export class ProductController {
     ): Promise<Product[]> {
         const filters = {
             categoryId,
+            colorId,
+            brandId,
             name,
             maxPrice: maxPrice ? parseFloat(maxPrice) : undefined,
             minPrice: minPrice ? parseFloat(minPrice) : undefined,

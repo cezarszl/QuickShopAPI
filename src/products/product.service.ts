@@ -16,18 +16,26 @@ export class ProductService {
     // Find all products based on filters
     async findAll(filters: {
         categoryId?: number;
+        colorId?: number;
+        brandId?: number;
         name?: string;
         minPrice?: number;
         maxPrice?: number;
         limit?: number;
         offset?: number;
     }): Promise<Product[]> {
-        const { categoryId, name, minPrice, maxPrice, limit, offset } = filters;
+        const { categoryId, colorId, brandId, name, minPrice, maxPrice, limit, offset } = filters;
 
         const where: any = {};
 
         if (categoryId)
             where.categoryId = categoryId;
+
+        if (colorId)
+            where.colorId = colorId;
+
+        if (brandId)
+            where.brandId = brandId;
 
         if (name) {
             where.name = {
