@@ -23,6 +23,8 @@ export class ProductController {
     @ApiQuery({ name: 'brandIds', required: false, type: [Number], isArray: true, description: 'Array of Brand IDs' })
     @ApiQuery({ name: 'minPrice', required: false, type: Number })
     @ApiQuery({ name: 'maxPrice', required: false, type: Number })
+    @ApiQuery({ name: 'sortBy', required: false, type: String })
+    @ApiQuery({ name: 'order', required: false, type: String })
     @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Limit the number of products returned' })
     @ApiQuery({ name: 'offset', required: false, type: Number, description: 'Skip the first N products' })
     async findAll(
@@ -32,6 +34,8 @@ export class ProductController {
         @Query('name') name?: string,
         @Query('minPrice') minPrice?: string,
         @Query('maxPrice') maxPrice?: string,
+        @Query('sortBy') sortBy?: string,
+        @Query('order') order?: string,
         @Query('limit') limit?: string,
         @Query('offset') offset?: string,
     ): Promise<Product[]> {
@@ -42,6 +46,8 @@ export class ProductController {
             name,
             maxPrice: maxPrice ? parseFloat(maxPrice) : undefined,
             minPrice: minPrice ? parseFloat(minPrice) : undefined,
+            sortBy: sortBy,
+            order: order,
             limit: limit ? parseInt(limit, 10) : undefined,
             offset: offset ? parseInt(offset, 10) : undefined,
         }

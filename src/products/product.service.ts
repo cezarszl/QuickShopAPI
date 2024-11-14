@@ -21,10 +21,12 @@ export class ProductService {
         name?: string;
         minPrice?: number;
         maxPrice?: number;
+        sortBy?: string;
+        order?: string;
         limit?: number;
         offset?: number;
     }): Promise<Product[]> {
-        const { categoryId, colorId, brandIds, name, minPrice, maxPrice, limit, offset } = filters;
+        const { categoryId, colorId, brandIds, name, minPrice, maxPrice, sortBy, order, limit, offset } = filters;
 
         const where: any = {};
 
@@ -53,10 +55,17 @@ export class ProductService {
             where.price = { ...where.price, lte: maxPrice };
         }
 
+        const orderBy: any = {};
+
+        if (sortBy) {
+            orderBy[sortBy] = order && order.toUpperCase() === 'DESC' ? 'desc' : 'asc';
+        }
+
         return this.prisma.product.findMany({
             where,
             skip: offset,
             take: limit,
+            orderBy: sortBy ? orderBy : undefined,
         });
     }
 
