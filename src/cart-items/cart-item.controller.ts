@@ -1,5 +1,5 @@
-import { Controller, Post, Delete, Patch, Get, Param, Body, ParseIntPipe, HttpCode, UseGuards, HttpStatus } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
+import { Controller, Post, Delete, Patch, Get, Param, Body, ParseIntPipe, HttpCode, UseGuards, HttpStatus, Headers, BadRequestException } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiBearerAuth, ApiHeader } from '@nestjs/swagger';
 import { CartItemService } from './cart-item.service';
 import { CartItemDto } from './dto/cart-item.dto';
 import { CartItem } from '@prisma/client';
@@ -8,8 +8,6 @@ import { PatchCartItemDto } from './dto/patch.cart-item.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('cart items')
-@ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
 @Controller('cart-items')
 export class CartItemController {
     constructor(private readonly cartItemService: CartItemService) { }
@@ -17,14 +15,27 @@ export class CartItemController {
     @Post()
     @ApiOperation({ summary: 'Add an item to the cart' })
     @ApiResponse({ status: 201, description: 'Item added to the cart', type: CartItemDto })
+    @ApiHeader({
+        name: 'cartId',
+        description: 'Optional cart ID from headers',
+        required: false,
+    })
     @ApiBody({ type: CreateCartItemDto })
     async addItem(
-        @Body() createCartItemDto: CreateCartItemDto
+        @Body() createCartItemDto: CreateCartItemDto,
+        @Headers('cartId') cartId?: string | null
     ): Promise<CartItem> {
         const { userId, productId, quantity } = createCartItemDto;
-        return this.cartItemService.addItem(userId, productId, quantity);
+
+        if (!userId && !cartId) {
+            throw new BadRequestException('Either userId or cartId must be provided');
+        }
+
+        return this.cartItemService.addItem(cartId, userId, productId, quantity);
     }
 
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @Delete(':id')
     @HttpCode(204)
     @ApiOperation({ summary: 'Remove an item from the cart' })
@@ -35,6 +46,8 @@ export class CartItemController {
         await this.cartItemService.removeItem(id);
     }
 
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @Delete('clear/:userId')
     @HttpCode(HttpStatus.NO_CONTENT)
     @ApiOperation({ summary: 'Clear the entire cart for a user' })
@@ -46,6 +59,8 @@ export class CartItemController {
         await this.cartItemService.clearCart(userId);
     }
 
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @Patch(':id')
     @ApiOperation({ summary: 'Update the quantity of an item in the cart' })
     @ApiResponse({ status: 200, description: 'Item quantity updated', type: CartItemDto })
@@ -59,6 +74,8 @@ export class CartItemController {
         return this.cartItemService.updateQuantity(id, patchCartItemDto.quantity);
     }
 
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @Get(':userId')
     @ApiOperation({ summary: 'Get all items in the cart for a user' })
     @ApiResponse({ status: 200, description: 'List of cart items', type: [CartItemDto] })

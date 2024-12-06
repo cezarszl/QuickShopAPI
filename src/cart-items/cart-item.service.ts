@@ -6,10 +6,43 @@ import { CartItem } from '@prisma/client';
 export class CartItemService {
     constructor(private readonly prisma: PrismaService) { }
 
-    async addItem(userId: number, productId: number, quantity: number): Promise<CartItem> {
+    async addItem(cartId: string | null, userId: number, productId: number, quantity: number): Promise<CartItem> {
+
+        // Check if product exists
+        const product = await this.prisma.product.findUnique({ where: { id: productId } });
+        if (!product) {
+            throw new NotFoundException(`Product with ID ${productId} does not exist`);
+        }
+
+        // Check if product exists
+        const user = await this.prisma.user.findUnique({ where: { id: userId } });
+        if (!user) {
+            throw new NotFoundException(`User with ID ${userId} does not exist`);
+        }
+
+        if (!cartId && !userId) {
+            throw new Error('Either card or userId must be provided');
+        }
+
+        // Check if product exist in cart
+        const existingCartItem = await this.prisma.cartItem.findFirst({
+            where: {
+                productId,
+                ...(userId ? { userId } : { cartId }),
+            },
+        });
+
+        if (existingCartItem) {
+            return this.prisma.cartItem.update({
+                where: { id: existingCartItem.id },
+                data: { quantity: existingCartItem.quantity + quantity }
+            })
+        }
+
         return this.prisma.cartItem.create({
             data: {
                 userId,
+                cartId,
                 productId,
                 quantity,
             },
