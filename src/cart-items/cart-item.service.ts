@@ -8,18 +8,6 @@ export class CartItemService {
 
     async addItem(cartId: string | null, userId: number, productId: number, quantity: number): Promise<CartItem> {
 
-        // Check if product exists
-        const product = await this.prisma.product.findUnique({ where: { id: productId } });
-        if (!product) {
-            throw new NotFoundException(`Product with ID ${productId} does not exist`);
-        }
-
-        // Check if product exists
-        const user = await this.prisma.user.findUnique({ where: { id: userId } });
-        if (!user) {
-            throw new NotFoundException(`User with ID ${userId} does not exist`);
-        }
-
         if (!cartId && !userId) {
             throw new Error('Either card or userId must be provided');
         }

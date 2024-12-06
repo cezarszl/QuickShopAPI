@@ -3,10 +3,11 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as passport from 'passport';
 import { ValidationPipe } from '@nestjs/common';
+import { useContainer } from 'class-validator';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  useContainer(app.select(AppModule), { fallbackOnErrors: true })
   const config = new DocumentBuilder()
     .setTitle('QuickShop API')
     .setDescription('REST Api')

@@ -21,6 +21,7 @@ import { BrandService } from './brands/brand.service';
 import { BrandController } from './brands/brand.controller';
 import { ColorService } from './colors/color.service';
 import { ColorController } from './colors/color.controller';
+import { DoesExistValidator } from './validators/does-exist.validator';
 
 @Module({
   imports: [AuthModule, ServeStaticModule.forRoot({
@@ -31,6 +32,6 @@ import { ColorController } from './colors/color.controller';
     },
   }),],
   controllers: [AppController, ProductController, UserController, CartItemController, OrderController, PaymentsController, CategoryController, BrandController, ColorController],
-  providers: [AppService, ProductService, PrismaService, UserService, CartItemService, OrderService, PaymentsService, CategoryService, BrandService, ColorService],
+  providers: [AppService, ProductService, PrismaService, UserService, CartItemService, OrderService, PaymentsService, CategoryService, BrandService, ColorService, DoesExistValidator],
 })
 export class AppModule { }
