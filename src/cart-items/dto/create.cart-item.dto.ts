@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty, IsPositive } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsPositive } from 'class-validator';
 
 export class CreateCartItemDto {
     @ApiProperty({ description: 'Quantity of the product in the cart' })
@@ -10,9 +10,10 @@ export class CreateCartItemDto {
 
     @ApiProperty({ description: 'ID of the user who owns the cart' })
     @IsInt()
+    @IsOptional()
     @IsNotEmpty({ message: 'User ID should not be empty' })
     @IsPositive({ message: 'User ID must be a positive integer' })
-    userId: number;
+    userId?: number;
 
     @ApiProperty({ description: 'ID of the product' })
     @IsInt()
