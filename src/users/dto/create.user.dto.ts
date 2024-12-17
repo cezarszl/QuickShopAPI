@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-
+import { IsUnique } from 'src/decorators/is-unique.decorator';
 export class CreateUserDto {
     @ApiProperty({ example: 'user@domain.com', description: 'Email address of the user' })
+    @IsUnique('user', 'email')
     email: string;
 
     @ApiProperty({ example: 'securePassword123', description: 'Password for the user' })

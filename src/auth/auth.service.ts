@@ -19,8 +19,6 @@ export class AuthService {
     async registerUser(registerDto: RegisterDto): Promise<RegisterResponseDto> {
         const { email, password, name, googleId } = registerDto;
 
-        await this.userService.checkIfUserExistsByEmail(email);
-
         //Hashing password
         const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
 

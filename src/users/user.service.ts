@@ -11,15 +11,6 @@ import * as bcrypt from 'bcrypt';
 export class UserService {
     constructor(private readonly prisma: PrismaService) { }
 
-    async checkIfUserExistsByEmail(email: string): Promise<void> {
-        const existingUser = await this.prisma.user.findUnique({
-            where: { email }
-        });
-
-        if (existingUser) {
-            throw new ConflictException(`User with email ${email} already exists.`)
-        }
-    }
     async checkIfUserExistsById(id: number): Promise<void> {
         const existingUser = await this.prisma.user.findUnique({
             where: { id }
@@ -31,8 +22,6 @@ export class UserService {
     }
 
     async createUser(data: CreateUserDto): Promise<User> {
-
-        await this.checkIfUserExistsByEmail(data.email);
 
         return this.prisma.user.create({
             data,
