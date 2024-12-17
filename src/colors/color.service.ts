@@ -22,14 +22,6 @@ export class ColorService {
     }
 
     async addColor(createColorDto: CreateColorDto): Promise<Color> {
-
-        const existingColor = await this.prisma.color.findUnique({
-            where: { name: createColorDto.name },
-        });
-
-        if (existingColor) {
-            throw new ConflictException('Color with this name already exists');
-        }
         return this.prisma.color.create({
             data: createColorDto,
         });
