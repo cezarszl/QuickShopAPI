@@ -22,14 +22,6 @@ export class BrandService {
     }
 
     async addBrand(createBrandDto: CreateBrandDto): Promise<Brand> {
-
-        const existingBrand = await this.prisma.brand.findUnique({
-            where: { name: createBrandDto.name },
-        });
-
-        if (existingBrand) {
-            throw new ConflictException('Brand with this name already exists');
-        }
         return this.prisma.brand.create({
             data: createBrandDto,
         });
