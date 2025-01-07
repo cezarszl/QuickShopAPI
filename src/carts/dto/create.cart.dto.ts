@@ -6,6 +6,7 @@ export class CreateCartDto {
     @ApiPropertyOptional({
         description: 'Optional ID of the user to whom the cart belongs.',
         required: false,
+        example: 126
     })
     @IsInt()
     @IsOptional()
