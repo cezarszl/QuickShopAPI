@@ -1,12 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, Min } from 'class-validator';
+import { IsInt, IsNotEmpty, IsPositive } from 'class-validator';
 
 export class PatchCartItemDto {
     @ApiProperty({
-        description: 'The quantity of the item in the cart',
-        example: 2,
+        description: 'Quantity of the product in the cart',
+        type: Number,
     })
-    @IsInt({ message: 'Quantity must be an integer' })
-    @Min(1, { message: 'Quantity must be at least 1' })
+    @IsInt()
+    @IsNotEmpty({ message: 'Quantity should not be empty' })
+    @IsPositive({ message: 'Quantity must be a positive integer' })
     quantity: number;
 }
