@@ -6,8 +6,8 @@ import { ProductController } from './products/product.controller';
 import { PrismaService } from './prisma.service';
 import { UserService } from './users/user.service';
 import { UserController } from './users/user.controller';
-import { CartItemService } from './cart-items/cart-item.service';
-import { CartItemController } from './cart-items/cart-item.controller';
+import { CartService } from './carts/cart.service';
+import { CartController } from './carts/cart.controller';
 import { AuthModule } from './auth/auth.module';
 import { OrderController } from './orders/order.controller';
 import { OrderService } from './orders/order.service';
@@ -32,7 +32,7 @@ import { IsUniqueValidator } from './validators/is-unique.validator';
       index: false,
     },
   }),],
-  controllers: [AppController, ProductController, UserController, CartItemController, OrderController, PaymentsController, CategoryController, BrandController, ColorController],
-  providers: [AppService, ProductService, PrismaService, UserService, CartItemService, OrderService, PaymentsService, CategoryService, BrandService, ColorService, DoesExistValidator, IsUniqueValidator],
+  controllers: [AppController, ProductController, UserController, CartController, OrderController, PaymentsController, CategoryController, BrandController, ColorController],
+  providers: [AppService, ProductService, PrismaService, UserService, CartService, OrderService, PaymentsService, CategoryService, BrandService, ColorService, DoesExistValidator, IsUniqueValidator],
 })
 export class AppModule { }
