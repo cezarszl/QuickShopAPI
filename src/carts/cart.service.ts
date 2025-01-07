@@ -88,4 +88,21 @@ export class CartService {
         return cartItems;
     }
 
+    async getCartItemsByUserId(userId: number): Promise<CartItem[]> {
+        const cart = await this.prisma.cart.findUnique({
+            where: { userId },
+        });
+
+        const cartItems = await this.prisma.cartItem.findMany({
+            where: { cartId: cart.id },
+        });
+
+        if (!cartItems.length) {
+            throw new NotFoundException(`No cart items found for userId: ${userId}`);
+        }
+
+        return cartItems;
+    }
+
+
 }
