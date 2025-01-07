@@ -1,34 +1,38 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional, IsInt, IsUUID } from 'class-validator';
 import { CartItemDto } from './cart-item.dto';
 
 export class CartDto {
     @ApiProperty({
         description: 'Unique identifier for the cart',
-        example: '123e4567-e89b-12d3-a456-426614174000'
+        example: 'b0c57edb-93d7-49ad-81ea-7a8f079f3c7b',
     })
-    id: string;
+    @IsUUID('4', { message: 'Cart ID must be a valid UUID' })
+    cartId: string;
 
-    @ApiPropertyOptional({
-        description: 'ID of the user who owns the cart. Optional for guest carts',
-        type: Number
+    @ApiProperty({
+        description: 'ID of the user who owns the cart (null for anonymous users)',
+        required: false,
     })
+    @IsOptional()
+    @IsInt({ message: 'User ID must be a valid integer' })
     userId?: number;
 
     @ApiProperty({
-        description: 'Items in the cart',
-        type: [CartItemDto]
+        description: 'List of items in the cart',
+        type: [CartItemDto],  // Używamy DTO dla elementów koszyka
     })
     items: CartItemDto[];
 
     @ApiProperty({
-        description: 'Creation timestamp',
-        type: Date
+        description: 'Creation timestamp of the cart',
+        example: '2025-01-07T12:00:00.000Z',
     })
     createdAt: Date;
 
     @ApiProperty({
-        description: 'Last updated timestamp',
-        type: Date
+        description: 'Last update timestamp of the cart',
+        example: '2025-01-07T12:30:00.000Z',
     })
     updatedAt: Date;
 }
