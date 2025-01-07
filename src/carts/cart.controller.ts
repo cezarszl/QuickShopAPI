@@ -14,7 +14,7 @@ export class CartController {
     constructor(private readonly cartService: CartService) { }
 
 
-    // POST	/carts
+    // POST /carts
     @Post()
     @ApiOperation({ summary: 'Create a new cart' })
     @ApiResponse({
@@ -22,15 +22,32 @@ export class CartController {
         description: 'Cart created successfully',
         type: CartDto,
     })
+    @ApiResponse({
+        status: 400,
+        description: 'Bad request: Validation failed for provided data.'
+    })
     @ApiBody({ type: CreateCartDto })
     async addCart(@Body() createCartDto: CreateCartDto): Promise<Cart> {
         return this.cartService.addCart(createCartDto);
     }
 
-    // POST	/carts/items
+
+    // POST /carts/items
     @Post('items')
     @ApiOperation({ summary: 'Add an item to the cart' })
-    @ApiResponse({ status: 201, description: 'Item added to the cart', type: CartItemDto })
+    @ApiResponse({
+        status: 201,
+        description: 'Item added to the cart successfully',
+        type: CartItemDto,
+    })
+    @ApiResponse({
+        status: 404,
+        description: 'Cart not found for the provided cartId.',
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'Bad request: Validation failed for provided data.',
+    })
     @ApiBody({ type: CreateCartItemDto })
     async addItemToCart(
         @Body() createCartItemDto: CreateCartItemDto
@@ -38,17 +55,34 @@ export class CartController {
         return this.cartService.addItemToCart(createCartItemDto);
     }
 
+
     // GET /carts/{cartId}
-    @Get('cart/:cartId')
+    @Get(':cartId')
     @ApiOperation({ summary: 'Get all items in the cart by cartId' })
     @ApiResponse({ status: 200, description: 'List of cart items', type: [CartItemDto] })
-    @ApiResponse({ status: 404, description: 'Cart items not found.' })
-    @ApiParam({ name: 'cartId', description: 'ID of the cart (from cookies)' })
+    @ApiResponse({ status: 404, description: 'Cart not found for the given cartId.' })
+    @ApiResponse({ status: 400, description: 'Bad request: cartId is missing.' })
+    @ApiParam({ name: 'cartId', description: 'ID of the cart (for anonymous users, usually from cookies)' })
     async getCartItemsByCartId(@Param('cartId') cartId: string): Promise<CartItem[]> {
         if (!cartId) {
             throw new BadRequestException('cartId is required');
         }
         return await this.cartService.getCartItemsByCartId(cartId);
+    }
+
+
+    // GET /carts/user/{userId}
+    @Get('user/:userId')
+    @ApiOperation({ summary: 'Get all items in the cart by userId' })
+    @ApiResponse({ status: 200, description: 'List of cart items', type: [CartItemDto] })
+    @ApiResponse({ status: 404, description: 'Cart not found for the given userId.' })
+    @ApiResponse({ status: 400, description: 'Bad request: userId is missing.' })
+    @ApiParam({ name: 'userId', description: 'ID of the user (for logged-in users)' })
+    async getCartItemsByUserId(@Param('userId') userId: number): Promise<CartItem[]> {
+        if (!userId) {
+            throw new BadRequestException('userId is required');
+        }
+        return await this.cartService.getCartItemsByUserId(userId);
     }
 
 }
