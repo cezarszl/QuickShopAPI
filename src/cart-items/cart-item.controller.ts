@@ -82,7 +82,7 @@ export class CartItemController {
     @ApiResponse({ status: 404, description: 'Cart items not found.' })
     @ApiParam({ name: 'userId', description: 'ID of the user whose cart items are to be retrieved' })
     async getCartItems(@Param('userId', ParseIntPipe) userId: number): Promise<CartItem[]> {
-        return await this.cartItemService.getCartItems(userId);
+        return await this.cartItemService.getCartItemsByUserId(userId);
 
     }
 }

@@ -69,7 +69,7 @@ export class CartItemService {
         }
     }
 
-    async getCartItems(userId: number): Promise<CartItem[]> {
+    async getCartItemsByUserId(userId: number): Promise<CartItem[]> {
         return await this.prisma.cartItem.findMany({
             where: { userId },
         });
