@@ -1,12 +1,15 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumber, IsOptional } from 'class-validator';
+import { IsInt, IsOptional, IsPositive } from 'class-validator';
+import { DoesExist } from 'src/decorators/does-exist.decorator';
 
 export class CreateCartDto {
     @ApiPropertyOptional({
-        description: 'ID of the user who owns the cart. Optional - can be used for guest carts',
-        type: Number
+        description: 'Optional ID of the user to whom the cart belongs.',
+        required: false,
     })
+    @IsInt()
     @IsOptional()
-    @IsNumber()
+    @DoesExist('user', 'id')
+    @IsPositive({ message: 'User ID must be a positive integer' })
     userId?: number;
 }
