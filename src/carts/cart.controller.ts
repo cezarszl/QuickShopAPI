@@ -38,6 +38,19 @@ export class CartController {
         return this.cartService.addItemToCart(createCartItemDto);
     }
 
+    // GET /carts/{cartId}
+    @Get('cart/:cartId')
+    @ApiOperation({ summary: 'Get all items in the cart by cartId' })
+    @ApiResponse({ status: 200, description: 'List of cart items', type: [CartItemDto] })
+    @ApiResponse({ status: 404, description: 'Cart items not found.' })
+    @ApiParam({ name: 'cartId', description: 'ID of the cart (from cookies)' })
+    async getCartItemsByCartId(@Param('cartId') cartId: string): Promise<CartItem[]> {
+        if (!cartId) {
+            throw new BadRequestException('cartId is required');
+        }
+        return await this.cartService.getCartItemsByCartId(cartId);
+    }
+
 }
 //     @ApiBearerAuth()
 //     @UseGuards(JwtAuthGuard)
