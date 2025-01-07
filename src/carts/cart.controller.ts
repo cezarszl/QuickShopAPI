@@ -2,25 +2,41 @@ import { Controller, Post, Delete, Patch, Get, Param, Body, ParseIntPipe, HttpCo
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiBearerAuth, ApiHeader } from '@nestjs/swagger';
 import { CartService } from './cart.service';
 import { CartItemDto } from './dto/cart-item.dto';
-import { CartItem } from '@prisma/client';
+import { CartDto } from './dto/cart.dto';
+import { Cart, CartItem } from '@prisma/client';
 import { CreateCartItemDto } from './dto/create.cart-item.dto';
 import { PatchCartItemDto } from './dto/patch.cart-item.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-
+import { CreateCartDto } from './dto/create.cart.dto';
 @ApiTags('carts')
 @Controller('carts')
 export class CartController {
-    constructor(private readonly cartItemService: CartService) { }
+    constructor(private readonly cartService: CartService) { }
 
+
+    // POST	/carts
     @Post()
-    @ApiOperation({ summary: 'Add an item to the cart' })
-    @ApiResponse({ status: 201, description: 'Item added to the cart', type: CartItemDto })
-    @ApiBody({ type: CreateCartItemDto })
-    async addItemToCart(
-        @Body() createCartItemDto: CreateCartItemDto
-    ): Promise<CartItemDto> {
-        return this.cartItemService.addItemToCart(createCartItemDto);
+    @ApiOperation({ summary: 'Create a new cart' })
+    @ApiResponse({
+        status: 201,
+        description: 'Cart created successfully',
+        type: CartDto,
+    })
+    @ApiBody({ type: CreateCartDto })
+    async addCart(@Body() createCartDto: CreateCartDto): Promise<Cart> {
+        return this.cartService.addCart(createCartDto);
     }
+
+    // // POST	/carts/items
+    // @Post('items')
+    // @ApiOperation({ summary: 'Add an item to the cart' })
+    // @ApiResponse({ status: 201, description: 'Item added to the cart', type: CartItemDto })
+    // @ApiBody({ type: CreateCartItemDto })
+    // async addItemToCart(
+    //     @Body() createCartItemDto: CreateCartItemDto
+    // ): Promise<CartItemDto> {
+    //     return this.cartService.addItemToCart(createCartItemDto);
+    // }
 
 }
 //     @ApiBearerAuth()
