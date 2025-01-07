@@ -22,7 +22,7 @@ export class CartService {
         return cart;
 
     }
-    
+
     async addItemToCart(createCartItemDto: CreateCartItemDto): Promise<CartItem> {
         const { cartId, productId, quantity } = createCartItemDto;
 
@@ -75,5 +75,17 @@ export class CartService {
 
         return newCartItem;
     }
-    
+
+    async getCartItemsByCartId(cartId: string): Promise<CartItem[]> {
+        const cartItems = await this.prisma.cartItem.findMany({
+            where: { cartId },
+        });
+
+        if (!cartItems.length) {
+            throw new NotFoundException(`No cart items found for cartId: ${cartId}`);
+        }
+
+        return cartItems;
+    }
+
 }
