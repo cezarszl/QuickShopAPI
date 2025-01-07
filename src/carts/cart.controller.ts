@@ -27,16 +27,16 @@ export class CartController {
         return this.cartService.addCart(createCartDto);
     }
 
-    // // POST	/carts/items
-    // @Post('items')
-    // @ApiOperation({ summary: 'Add an item to the cart' })
-    // @ApiResponse({ status: 201, description: 'Item added to the cart', type: CartItemDto })
-    // @ApiBody({ type: CreateCartItemDto })
-    // async addItemToCart(
-    //     @Body() createCartItemDto: CreateCartItemDto
-    // ): Promise<CartItemDto> {
-    //     return this.cartService.addItemToCart(createCartItemDto);
-    // }
+    // POST	/carts/items
+    @Post('items')
+    @ApiOperation({ summary: 'Add an item to the cart' })
+    @ApiResponse({ status: 201, description: 'Item added to the cart', type: CartItemDto })
+    @ApiBody({ type: CreateCartItemDto })
+    async addItemToCart(
+        @Body() createCartItemDto: CreateCartItemDto
+    ): Promise<CartItemDto> {
+        return this.cartService.addItemToCart(createCartItemDto);
+    }
 
 }
 //     @ApiBearerAuth()
