@@ -137,11 +137,25 @@ export class CartController {
     @ApiResponse({ status: 404, description: 'Cart item not found' })
     @ApiParam({ name: 'cartId', description: 'ID of the cart' })
     @ApiParam({ name: 'productId', description: 'ID of the product' })
-    async removeCartItem(
+    async removeCartItemByCartId(
         @Param('cartId') cartId: string,
         @Param('productId') productId: number,
     ): Promise<void> {
         return this.cartService.removeCartItemByCartId(cartId, productId);
+    }
+
+    // DELETE /users/:userId/cart/items/:productId
+    @Delete('users/:userId/cart/items/:productId')
+    @ApiOperation({ summary: 'Remove an item from user cart' })
+    @ApiResponse({ status: 200, description: 'Cart item removed successfully' })
+    @ApiResponse({ status: 404, description: 'Cart or cart item not found' })
+    @ApiParam({ name: 'userId', description: 'ID of the user' })
+    @ApiParam({ name: 'productId', description: 'ID of the product' })
+    async removeCartItemByUserId(
+        @Param('userId', ParseIntPipe) userId: number,
+        @Param('productId', ParseIntPipe) productId: number,
+    ): Promise<void> {
+        return this.cartService.removeCartItemByUserId(userId, productId);
     }
 }
 //     @ApiBearerAuth()
