@@ -105,7 +105,7 @@ export class CartService {
         return cartItems;
     }
 
-    async updateCartItemQuantity(cartId: string, productId: number, patchCartItemDto: PatchCartItemDto): Promise<CartItem> {
+    async updateCartItemQuantityByCartId(cartId: string, productId: number, patchCartItemDto: PatchCartItemDto): Promise<CartItem> {
         const { quantity } = patchCartItemDto;
 
         const cartItem = await this.prisma.cartItem.findUnique({
@@ -130,6 +130,43 @@ export class CartService {
             },
             data: { quantity }
         })
+        return updatedCartItem;
+    }
+
+    async updateCartItemQuantityByUserId(userId: number, productId: number, patchCartItemDto: PatchCartItemDto): Promise<CartItem> {
+        const { quantity } = patchCartItemDto;
+
+        const cart = await this.prisma.cart.findFirst({
+            where: { userId }
+        });
+
+        if (!cart) {
+            throw new NotFoundException(`Cart for user ${userId} not found`);
+        }
+
+        const cartItem = await this.prisma.cartItem.findUnique({
+            where: {
+                cartId_productId: {
+                    cartId: cart.id,
+                    productId
+                }
+            }
+        });
+
+        if (!cartItem) {
+            throw new NotFoundException(`Cart item with productId ${productId} not found in user's ${userId} cart`);
+        }
+
+        const updatedCartItem = await this.prisma.cartItem.update({
+            where: {
+                cartId_productId: {
+                    cartId: cart.id,
+                    productId
+                }
+            },
+            data: { quantity }
+        });
+
         return updatedCartItem;
     }
 
