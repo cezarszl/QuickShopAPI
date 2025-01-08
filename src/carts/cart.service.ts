@@ -170,7 +170,7 @@ export class CartService {
         return updatedCartItem;
     }
 
-    async removeCartItem(cartId: string, productId: number): Promise<void> {
+    async removeCartItemByCartId(cartId: string, productId: number): Promise<void> {
         const cartItem = await this.prisma.cartItem.findUnique({
             where: {
                 cartId_productId: {
