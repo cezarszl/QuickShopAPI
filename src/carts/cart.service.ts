@@ -255,4 +255,64 @@ export class CartService {
             where: { cartId }
         });
     }
+
+    async mergeCarts(userId: number, anonymousCartId: string): Promise<boolean> {
+        const [userCart, anonymousCart] = await this.prisma.$transaction([
+            this.prisma.cart.findUnique({ where: { userId } }),
+            this.prisma.cart.findUnique({ where: { id: anonymousCartId } }),
+        ]);
+
+        if (!anonymousCart) {
+            throw new NotFoundException('Anonymous cart not found');
+        }
+
+        if (!userCart) {
+            throw new NotFoundException('User cart not found');
+        }
+
+        const anonymousCartItems = await this.prisma.cartItem.findMany({
+            where: { cartId: anonymousCart.id },
+        });
+
+        await this.prisma.$transaction(async (prisma) => {
+            for (const item of anonymousCartItems) {
+                const existingItem = await prisma.cartItem.findUnique({
+                    where: {
+                        cartId_productId: {
+                            cartId: userCart.id,
+                            productId: item.productId,
+                        },
+                    },
+                });
+
+                if (existingItem) {
+                    await prisma.cartItem.update({
+                        where: {
+                            cartId_productId: {
+                                cartId: userCart.id,
+                                productId: item.productId,
+                            },
+                        },
+                        data: {
+                            quantity: existingItem.quantity + item.quantity,
+                        },
+                    });
+                } else {
+                    await prisma.cartItem.create({
+                        data: {
+                            cartId: userCart.id,
+                            productId: item.productId,
+                            quantity: item.quantity,
+                        },
+                    });
+                }
+            }
+
+            await prisma.cartItem.deleteMany({ where: { cartId: anonymousCart.id } });
+            await prisma.cart.delete({ where: { id: anonymousCart.id } });
+        });
+
+        return true;
+    }
+
 }
