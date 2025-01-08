@@ -9,13 +9,13 @@ import { PatchCartItemDto } from './dto/patch.cart-item.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateCartDto } from './dto/create.cart.dto';
 @ApiTags('carts')
-@Controller('carts')
+@Controller()
 export class CartController {
     constructor(private readonly cartService: CartService) { }
 
 
     // POST /carts
-    @Post()
+    @Post('carts')
     @ApiOperation({ summary: 'Create a new cart' })
     @ApiResponse({
         status: 201,
@@ -33,7 +33,7 @@ export class CartController {
 
 
     // POST /carts/items
-    @Post('items')
+    @Post('carts/items')
     @ApiOperation({ summary: 'Add an item to the cart' })
     @ApiResponse({
         status: 201,
@@ -57,7 +57,7 @@ export class CartController {
 
 
     // GET /carts/{cartId}
-    @Get(':cartId')
+    @Get('carts/:cartId')
     @ApiOperation({ summary: 'Get all items in the cart by cartId' })
     @ApiResponse({ status: 200, description: 'List of cart items', type: [CartItemDto] })
     @ApiResponse({ status: 404, description: 'Cart not found for the given cartId.' })
@@ -71,8 +71,8 @@ export class CartController {
     }
 
 
-    // GET /carts/user/{userId}
-    @Get('user/:userId')
+    // GET /users/{userId}/cart
+    @Get('users/:userId/cart')
     @ApiOperation({ summary: 'Get all items in the cart by userId' })
     @ApiResponse({ status: 200, description: 'List of cart items', type: [CartItemDto] })
     @ApiResponse({ status: 404, description: 'Cart not found for the given userId.' })
@@ -87,24 +87,40 @@ export class CartController {
 
     // @ApiBearerAuth()
     // @UseGuards(JwtAuthGuard)
-    // PATCH /carts/:cartId/:productId
-    @Patch('items/:cartId/:productId')
+    // PATCH /carts/:cartId/items/:productId
+    @Patch('carts/:cartId/items/:productId')
     @ApiOperation({ summary: 'Update the quantity of an item in the cart' })
     @ApiResponse({ status: 200, description: 'Cart item updated successfully', type: CartItemDto })
     @ApiResponse({ status: 404, description: 'Cart item not found' })
     @ApiParam({ name: 'cartId', description: 'ID of the cart' })
     @ApiParam({ name: 'productId', description: 'ID of the product' })
     @ApiBody({ type: PatchCartItemDto })
-    async updateCartItem(
+    async updateCartItemByCartId(
         @Param('cartId') cartId: string,
         @Param('productId') productId: number,
         @Body() updateCartItemDto: PatchCartItemDto,
     ): Promise<CartItemDto> {
-        return this.cartService.updateCartItemQuantity(cartId, productId, updateCartItemDto);
+        return this.cartService.updateCartItemQuantityByCartId(cartId, productId, updateCartItemDto);
     }
 
-    // DELETE /carts/:cartId/:productId
-    @Delete('items/:cartId/:productId')
+    // PATCH /users/:userId/cart/items/:productId
+    @Patch('users/:userId/cart/items/:productId')
+    @ApiOperation({ summary: 'Update the quantity of an item in the cart' })
+    @ApiResponse({ status: 200, description: 'Cart item updated successfully', type: CartItemDto })
+    @ApiResponse({ status: 404, description: 'Cart item not found' })
+    @ApiParam({ name: 'userId', description: 'ID of the user' })
+    @ApiParam({ name: 'productId', description: 'ID of the product' })
+    @ApiBody({ type: PatchCartItemDto })
+    async updateCartItemByUserId(
+        @Param('userId') userId: number,
+        @Param('productId') productId: number,
+        @Body() updateCartItemDto: PatchCartItemDto,
+    ): Promise<CartItemDto> {
+        return this.cartService.updateCartItemQuantityByUserId(userId, productId, updateCartItemDto);
+    }
+
+    // DELETE /carts/:cartId/items/:productId
+    @Delete('carts/:cartId/items/:productId')
     @ApiOperation({ summary: 'Remove an item from the cart' })
     @ApiResponse({ status: 200, description: 'Cart item removed successfully' })
     @ApiResponse({ status: 404, description: 'Cart item not found' })
