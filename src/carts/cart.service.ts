@@ -227,4 +227,32 @@ export class CartService {
             }
         });
     }
+
+    async clearCartByUserId(userId: number): Promise<void> {
+        const cart = await this.prisma.cart.findFirst({
+            where: { userId }
+        });
+
+        if (!cart) {
+            throw new NotFoundException(`Cart for user ${userId} not found`);
+        }
+
+        await this.prisma.cartItem.deleteMany({
+            where: { cartId: cart.id }
+        });
+    }
+
+    async clearCartByCartId(cartId: string): Promise<void> {
+        const cart = await this.prisma.cart.findUnique({
+            where: { id: cartId }
+        });
+
+        if (!cart) {
+            throw new NotFoundException(`Cart ${cartId} not found`);
+        }
+
+        await this.prisma.cartItem.deleteMany({
+            where: { cartId }
+        });
+    }
 }
