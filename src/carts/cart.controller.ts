@@ -157,43 +157,29 @@ export class CartController {
     ): Promise<void> {
         return this.cartService.removeCartItemByUserId(userId, productId);
     }
+
+    // DELETE /users/:userId/cart/clear
+    @Delete('users/:userId/cart/clear')
+    @ApiOperation({ summary: 'Clear logged user cart' })
+    @ApiResponse({ status: 200, description: 'Cart cleared successfully' })
+    @ApiResponse({ status: 404, description: 'User cart not found' })
+    @ApiParam({ name: 'userId', description: 'ID of the user' })
+    async clearUserCart(
+        @Param('userId', ParseIntPipe) userId: number
+    ): Promise<void> {
+        return this.cartService.clearCartByUserId(userId);
+    }
+
+    // DELETE /carts/:cartId/clear
+    @Delete('carts/:cartId/clear')
+    @ApiOperation({ summary: 'Clear anonymous cart' })
+    @ApiResponse({ status: 200, description: 'Cart cleared successfully' })
+    @ApiResponse({ status: 404, description: 'Cart not found' })
+    @ApiParam({ name: 'cartId', description: 'ID of the cart' })
+    async clearAnonymousCart(
+        @Param('cartId') cartId: string
+    ): Promise<void> {
+        return this.cartService.clearCartByCartId(cartId);
+    }
 }
-//     @ApiBearerAuth()
-//     @UseGuards(JwtAuthGuard)
-//     @Delete(':id')
-//     @HttpCode(204)
-//     @ApiOperation({ summary: 'Remove an item from the cart' })
-//     @ApiResponse({ status: 204, description: 'Item removed from the cart' })
-//     @ApiResponse({ status: 404, description: 'Item not found.' })
-//     @ApiParam({ name: 'id', description: 'ID of the cart item to remove' })
-//     async removeItem(@Param('id', ParseIntPipe) id: number): Promise<void> {
-//         await this.cartItemService.removeItem(id);
-//     }
 
-//     @ApiBearerAuth()
-//     @UseGuards(JwtAuthGuard)
-//     @Delete('clear/:userId')
-//     @HttpCode(HttpStatus.NO_CONTENT)
-//     @ApiOperation({ summary: 'Clear the entire cart for a user' })
-//     @ApiResponse({ status: 204, description: 'Cart cleared successfully.' })
-//     @ApiResponse({ status: 404, description: 'User not found.' })
-//     @ApiParam({ name: 'userId', description: 'ID of the user whose cart will be cleared' })
-
-//     async clearCart(@Param('userId', ParseIntPipe) userId: number): Promise<void> {
-//         await this.cartItemService.clearCart(userId);
-//     }
-
-//     
-
-//     @ApiBearerAuth()
-//     @UseGuards(JwtAuthGuard)
-//     @Get(':userId')
-//     @ApiOperation({ summary: 'Get all items in the cart for a user' })
-//     @ApiResponse({ status: 200, description: 'List of cart items', type: [CartItemDto] })
-//     @ApiResponse({ status: 404, description: 'Cart items not found.' })
-//     @ApiParam({ name: 'userId', description: 'ID of the user whose cart items are to be retrieved' })
-//     async getCartItems(@Param('userId', ParseIntPipe) userId: number): Promise<CartItem[]> {
-//         return await this.cartItemService.getCartItemsByUserId(userId);
-
-//     }
-// }
