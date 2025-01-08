@@ -1,4 +1,4 @@
-import { Controller, Post, Delete, Patch, Get, Param, Body, ParseIntPipe, HttpCode, UseGuards, HttpStatus, Headers, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Delete, Patch, Get, Param, Body, ParseIntPipe, HttpCode, UseGuards, HttpStatus, Headers, BadRequestException, Put, NotFoundException } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiBearerAuth, ApiHeader } from '@nestjs/swagger';
 import { CartService } from './cart.service';
 import { CartItemDto } from './dto/cart-item.dto';
@@ -8,6 +8,7 @@ import { CreateCartItemDto } from './dto/create.cart-item.dto';
 import { PatchCartItemDto } from './dto/patch.cart-item.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateCartDto } from './dto/create.cart.dto';
+import { MergeCartDto } from './dto/merge.cart';
 @ApiTags('carts')
 @Controller()
 export class CartController {
@@ -180,6 +181,31 @@ export class CartController {
         @Param('cartId') cartId: string
     ): Promise<void> {
         return this.cartService.clearCartByCartId(cartId);
+    }
+
+    // PUT /carts/merge
+    @Put('/carts/merge')
+    @ApiOperation({ summary: 'Merge anonymous cart with user cart' })
+    @ApiResponse({ status: 200, description: 'Carts merged successfully' })
+    @ApiResponse({ status: 400, description: 'Invalid data provided' })
+    @ApiBody({
+        description: 'Data for merging carts',
+        type: MergeCartDto,
+    })
+    async mergeCarts(@Body() mergeCartDto: MergeCartDto): Promise<void> {
+        const { anonymousCartId, userId } = mergeCartDto;
+
+        if (!anonymousCartId || !userId) {
+            throw new BadRequestException(
+                'anonymousCartId and userId are required for merging carts',
+            );
+        }
+
+        const result = await this.cartService.mergeCarts(userId, anonymousCartId);
+
+        if (!result) {
+            throw new NotFoundException('Unable to merge carts');
+        }
     }
 }
 
