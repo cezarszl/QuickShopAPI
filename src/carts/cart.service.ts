@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma.service';
 import { Cart, CartItem, Prisma } from '@prisma/client';
 import { CreateCartItemDto } from './dto/create.cart-item.dto';
 import { CreateCartDto } from './dto/create.cart.dto';
+import { PatchCartItemDto } from './dto/patch.cart-item.dto';
 
 @Injectable()
 export class CartService {
@@ -104,5 +105,31 @@ export class CartService {
         return cartItems;
     }
 
+    async updateCartItemQuantity(cartId: string, productId: number, patchCartItemDto: PatchCartItemDto): Promise<CartItem> {
+        const { quantity } = patchCartItemDto;
 
+        const cartItem = await this.prisma.cartItem.findUnique({
+            where: {
+                cartId_productId: {
+                    cartId,
+                    productId
+                }
+            }
+        })
+
+        if (!cartItem) {
+            throw new NotFoundException(`Cart item with cartId ${cartId} and productId ${productId} not found`)
+        }
+
+        const updatedCartItem = await this.prisma.cartItem.update({
+            where: {
+                cartId_productId: {
+                    cartId,
+                    productId
+                }
+            },
+            data: { quantity }
+        })
+        return updatedCartItem;
+    }
 }
