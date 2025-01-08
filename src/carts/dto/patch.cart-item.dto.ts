@@ -4,7 +4,7 @@ import { IsInt, IsNotEmpty, IsPositive } from 'class-validator';
 export class PatchCartItemDto {
     @ApiProperty({
         description: 'Quantity of the product in the cart',
-        type: Number,
+        example: '6'
     })
     @IsInt()
     @IsNotEmpty({ message: 'Quantity should not be empty' })
