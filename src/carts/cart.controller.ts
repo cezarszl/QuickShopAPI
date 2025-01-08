@@ -85,6 +85,24 @@ export class CartController {
         return await this.cartService.getCartItemsByUserId(userId);
     }
 
+    // @ApiBearerAuth()
+    // @UseGuards(JwtAuthGuard)
+    // PATCH /carts/:cartId/:productId
+    @Patch('items/:cartId/:productId')
+    @ApiOperation({ summary: 'Update the quantity of an item in the cart' })
+    @ApiResponse({ status: 200, description: 'Cart item updated successfully', type: CartItemDto })
+    @ApiResponse({ status: 404, description: 'Cart item not found' })
+    @ApiParam({ name: 'cartId', description: 'ID of the cart' })
+    @ApiParam({ name: 'productId', description: 'ID of the product' })
+    @ApiBody({ type: PatchCartItemDto })
+    async updateCartItem(
+        @Param('cartId') cartId: string,
+        @Param('productId') productId: number,
+        @Body() updateCartItemDto: PatchCartItemDto,
+    ): Promise<CartItemDto> {
+        return this.cartService.updateCartItemQuantity(cartId, productId, updateCartItemDto);
+    }
+
 }
 //     @ApiBearerAuth()
 //     @UseGuards(JwtAuthGuard)
@@ -111,20 +129,7 @@ export class CartController {
 //         await this.cartItemService.clearCart(userId);
 //     }
 
-//     @ApiBearerAuth()
-//     @UseGuards(JwtAuthGuard)
-//     @Patch(':id')
-//     @ApiOperation({ summary: 'Update the quantity of an item in the cart' })
-//     @ApiResponse({ status: 200, description: 'Item quantity updated', type: CartItemDto })
-//     @ApiResponse({ status: 404, description: 'Item not found.' })
-//     @ApiParam({ name: 'id', description: 'ID of the cart item to update' })
-//     @ApiBody({ type: PatchCartItemDto, description: 'Updated quantity for the cart item' })
-//     async updateQuantity(
-//         @Param('id', ParseIntPipe) id: number,
-//         @Body() patchCartItemDto: PatchCartItemDto
-//     ): Promise<CartItem> {
-//         return this.cartItemService.updateQuantity(id, patchCartItemDto.quantity);
-//     }
+//     
 
 //     @ApiBearerAuth()
 //     @UseGuards(JwtAuthGuard)
