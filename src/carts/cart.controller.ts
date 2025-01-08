@@ -73,8 +73,8 @@ export class CartController {
     }
 
     @Delete('carts/:cartId/clear')
-    @ApiOperation({ summary: 'Clear anonymous cart' })
-    @ApiResponse({ status: 204, description: 'Cart cleared successfully' })
+    @ApiOperation({ summary: 'Clear anonymous cart and delete it' })
+    @ApiResponse({ status: 204, description: 'Cart cleared successfully and deleted' })
     @ApiResponse({ status: 404, description: 'Cart not found' })
     async clearAnonymousCart(@Param('cartId') cartId: string): Promise<void> {
         return this.cartService.clearCartByCartId(cartId);

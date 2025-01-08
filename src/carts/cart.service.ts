@@ -180,6 +180,10 @@ export class CartService {
         await this.prisma.cartItem.deleteMany({
             where: { cartId }
         });
+
+        await this.prisma.cart.delete({
+            where: { id: cartId },
+        })
     }
 
     async mergeCarts(userId: number, anonymousCartId: string): Promise<boolean> {
