@@ -78,7 +78,7 @@ export class CartController {
     @ApiResponse({ status: 404, description: 'Cart not found for the given userId.' })
     @ApiResponse({ status: 400, description: 'Bad request: userId is missing.' })
     @ApiParam({ name: 'userId', description: 'ID of the user (for logged-in users)' })
-    async getCartItemsByUserId(@Param('userId') userId: number): Promise<CartItem[]> {
+    async getCartItemsByUserId(@Param('userId', ParseIntPipe) userId: number): Promise<CartItem[]> {
         if (!userId) {
             throw new BadRequestException('userId is required');
         }
@@ -97,7 +97,7 @@ export class CartController {
     @ApiBody({ type: PatchCartItemDto })
     async updateCartItemByCartId(
         @Param('cartId') cartId: string,
-        @Param('productId') productId: number,
+        @Param('productId', ParseIntPipe) productId: number,
         @Body() updateCartItemDto: PatchCartItemDto,
     ): Promise<CartItemDto> {
         return this.cartService.updateCartItemQuantityByCartId(cartId, productId, updateCartItemDto);
@@ -105,15 +105,26 @@ export class CartController {
 
     // PATCH /users/:userId/cart/items/:productId
     @Patch('users/:userId/cart/items/:productId')
-    @ApiOperation({ summary: 'Update the quantity of an item in the cart' })
-    @ApiResponse({ status: 200, description: 'Cart item updated successfully', type: CartItemDto })
-    @ApiResponse({ status: 404, description: 'Cart item not found' })
+    @ApiOperation({ summary: 'Update the quantity of an item in the user cart' })
+    @ApiResponse({
+        status: 200,
+        description: 'Cart item updated successfully',
+        type: CartItemDto
+    })
+    @ApiResponse({
+        status: 404,
+        description: 'Cart or cart item not found'
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'Bad request: Validation failed for provided data.'
+    })
     @ApiParam({ name: 'userId', description: 'ID of the user' })
     @ApiParam({ name: 'productId', description: 'ID of the product' })
     @ApiBody({ type: PatchCartItemDto })
     async updateCartItemByUserId(
-        @Param('userId') userId: number,
-        @Param('productId') productId: number,
+        @Param('userId', ParseIntPipe) userId: number,
+        @Param('productId', ParseIntPipe) productId: number,
         @Body() updateCartItemDto: PatchCartItemDto,
     ): Promise<CartItemDto> {
         return this.cartService.updateCartItemQuantityByUserId(userId, productId, updateCartItemDto);
@@ -130,7 +141,7 @@ export class CartController {
         @Param('cartId') cartId: string,
         @Param('productId') productId: number,
     ): Promise<void> {
-        return this.cartService.removeCartItem(cartId, productId);
+        return this.cartService.removeCartItemByCartId(cartId, productId);
     }
 }
 //     @ApiBearerAuth()
