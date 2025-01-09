@@ -55,6 +55,9 @@ export class CartService {
     async getCartItemsByCartId(cartId: string): Promise<CartItem[]> {
         const cartItems = await this.prisma.cartItem.findMany({
             where: { cartId },
+            orderBy: {
+                createdAt: 'asc'
+            }
         });
 
         if (!cartItems.length) {
@@ -69,6 +72,9 @@ export class CartService {
 
         const cartItems = await this.prisma.cartItem.findMany({
             where: { cartId: cart.id },
+            orderBy: {
+                createdAt: 'asc'
+            }
         });
 
         if (!cartItems.length) {
