@@ -6,6 +6,7 @@ import { ProductDto } from './dto/product.dto';
 import { CreateProductDto } from './dto/create.product.dto';
 import { UpdateProductDto } from './dto/update.product.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ProductsResponseDto } from './dto/product-response.dto';
 
 @ApiTags('products')
 @Controller('products')
@@ -16,7 +17,7 @@ export class ProductController {
     // Get all products
     @Get()
     @ApiOperation({ summary: 'Retrieve all products' })
-    @ApiResponse({ status: 200, description: 'List of all products', type: [ProductDto] })
+    @ApiResponse({ status: 200, description: 'List of all products', type: ProductsResponseDto })
     @ApiQuery({ name: 'name', required: false, type: String })
     @ApiQuery({ name: 'categoryId', required: false, type: Number })
     @ApiQuery({ name: 'colorId', required: false, type: Number })
@@ -38,7 +39,7 @@ export class ProductController {
         @Query('order') order?: string,
         @Query('limit') limit?: string,
         @Query('offset') offset?: string,
-    ): Promise<Product[]> {
+    ): Promise<{ products: Product[]; totalCount: number }> {
         const filters = {
             categoryId,
             colorId,
@@ -51,7 +52,8 @@ export class ProductController {
             limit: limit ? parseInt(limit, 10) : undefined,
             offset: offset ? parseInt(offset, 10) : undefined,
         }
-        return this.productService.findAll(filters);
+        const { products, totalCount } = await this.productService.findAll(filters);
+        return { products, totalCount };
     }
 
 
