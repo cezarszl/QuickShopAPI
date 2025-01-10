@@ -25,7 +25,8 @@ export class ProductService {
         order?: string;
         limit?: number;
         offset?: number;
-    }): Promise<Product[]> {
+    }): Promise<{ products: Product[]; totalCount: number }> {
+
         const { categoryId, colorId, brandIds, name, minPrice, maxPrice, sortBy, order, limit, offset } = filters;
 
         const where: any = {};
@@ -61,12 +62,21 @@ export class ProductService {
             orderBy[sortBy] = order && order.toUpperCase() === 'DESC' ? 'desc' : 'asc';
         }
 
-        return this.prisma.product.findMany({
+        const products = await this.prisma.product.findMany({
             where,
             skip: offset,
             take: limit,
             orderBy: sortBy ? orderBy : undefined,
         });
+
+        const totalCount = await this.prisma.product.count({
+            where,
+        });
+
+        return {
+            products,
+            totalCount,
+        };
     }
 
     // Find specific product by id
