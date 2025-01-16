@@ -11,7 +11,7 @@ import { GoogleStrategy } from './strategies/google.strategy';
     imports: [
         JwtModule.register({
             secret: process.env.JWT_SECRET || 'secretKey',
-            signOptions: { expiresIn: '60m' }
+            signOptions: { expiresIn: '30m' }
         }),
     ],
     providers: [AuthService, UserService, PrismaService, JwtStrategy, GoogleStrategy],
