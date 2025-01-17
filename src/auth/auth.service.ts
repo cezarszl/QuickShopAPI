@@ -1,4 +1,4 @@
-import { Injectable, ConflictException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, ConflictException, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../users/user.service';
 import { JwtPayload } from '../interfaces/jwt-payload.interface';
@@ -7,6 +7,8 @@ import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcrypt';
 import { User } from '@prisma/client';
 import { RegisterResponseDto } from './dto/register.response.dto';
+import { LoginDtoResponse } from './dto/login.response.dto';
+
 
 
 @Injectable()
@@ -20,7 +22,9 @@ export class AuthService {
         const { email, password, name, googleId } = registerDto;
 
         //Hashing password
+
         const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
+
 
         //Creating a new user
         const newUser = await this.userService.createUser({
@@ -37,6 +41,7 @@ export class AuthService {
         return {
             accessToken,
             user: {
+                id: newUser.id,
                 email: newUser.email,
                 name: newUser.name,
                 googleId: newUser.googleId
@@ -62,13 +67,13 @@ export class AuthService {
         return user;
     }
 
-    async login(loginDto: LoginDto): Promise<string> {
+    async login(loginDto: LoginDto): Promise<LoginDtoResponse> {
         const { email, password } = loginDto;
 
         //Finding use by email
         const user = await this.userService.findUserByEmail(email);
         if (!user) {
-            throw new UnauthorizedException('Invalid credientals');
+            throw new UnauthorizedException('Invalid credentials');
         }
         // Comparing passwords
         if (!user.password || !(await bcrypt.compare(password, user.password))) {
@@ -76,16 +81,27 @@ export class AuthService {
         }
         //Generating JWT
         const payload: JwtPayload = { email: user.email, sub: user.id };
-        return this.jwtService.sign(payload);
+        const accessToken = this.jwtService.sign(payload);
+
+        return {
+            accessToken,
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                googleId: user.googleId
+            }
+        };
     }
 
-    async validateToken(token: string): Promise<any> {
-        try {
-            const decoded = this.jwtService.verify(token);
-            return await this.userService.findUserById(decoded.sub);
-        } catch (error) {
-            throw new UnauthorizedException('Invalid token')
-        }
-    }
+    // Not in use for now
+    // async validateToken(token: string): Promise<User> {
+    //     try {
+    //         const decoded = this.jwtService.verify(token);
+    //         return await this.userService.findUserById(decoded.sub);
+    //     } catch (error) {
+    //         throw new UnauthorizedException('Invalid token')
+    //     }
+    // }
 }
 
