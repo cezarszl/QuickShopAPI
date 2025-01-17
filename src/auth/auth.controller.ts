@@ -1,12 +1,13 @@
-import { Controller, Post, Body, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, Req, UseGuards, InternalServerErrorException, BadRequestException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiHeader } from '@nestjs/swagger';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { RegisterResponseDto } from './dto/register.response.dto';
 import { Request } from 'express';
+import { LoginDtoResponse } from './dto/login.response.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -25,6 +26,10 @@ export class AuthController {
         status: 409,
         description: 'Conflict: User with email already exists.',
     })
+    @ApiResponse({
+        status: 500,
+        description: 'Internal server error occurred during registration.',
+    })
     async register(@Body() registerDto: RegisterDto): Promise<RegisterResponseDto> {
         try {
             return await this.authService.registerUser(registerDto);
@@ -32,7 +37,12 @@ export class AuthController {
             if (error instanceof ConflictException) {
                 throw new ConflictException('User already exists');
             }
-            throw error;
+            if (error instanceof BadRequestException) {
+                throw error;
+            }
+            // Log unexpected errors
+            console.error('Registration error:', error);
+            throw new InternalServerErrorException('Registration failed');
         }
     }
 
@@ -42,20 +52,19 @@ export class AuthController {
     @ApiResponse({
         status: 200,
         description: 'User successfully logged in and token returned.',
-        schema: {
-            example: {
-                accessToken: 'jwtToken',
-            },
-        },
+        type: LoginDtoResponse,
     })
     @ApiResponse({
         status: 401,
         description: 'Unauthorized: Invalid credentials.',
     })
-    async login(@Body() loginDto: LoginDto): Promise<{ access_token: string }> {
+    @ApiResponse({
+        status: 500,
+        description: 'Internal server error occurred during login.',
+    })
+    async login(@Body() loginDto: LoginDto): Promise<LoginDtoResponse> {
         try {
-            const jwtToken = await this.authService.login(loginDto);
-            return { access_token: jwtToken };
+            return await this.authService.login(loginDto);
         } catch (error) {
             if (error instanceof UnauthorizedException) {
                 throw new UnauthorizedException('Invalid credentials');
@@ -69,7 +78,9 @@ export class AuthController {
     @ApiOperation({ summary: 'Redirect to Google for authentication' })
     @ApiResponse({ status: 302, description: 'Redirects to Google OAuth2 login page.' })
     googleAuth(@Req() req: Request) {
-
+        // This endpoint initiates Google OAuth flow
+        // The actual redirect is handled by GoogleAuthGuard
+        return;
     }
 
     @Get('google/callback')
