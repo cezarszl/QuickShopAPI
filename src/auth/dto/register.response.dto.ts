@@ -19,6 +19,9 @@ export class RegisterResponseDto {
     @ApiProperty({ description: 'JWT token for the authenticated user' })
     accessToken: string;
 
+    @ApiProperty({ description: 'Refresh token for the authenticated user' })
+    refreshToken: string;
+
     @ApiProperty({ description: 'Information about the user' })
     user: UserInfoDto;
 }
