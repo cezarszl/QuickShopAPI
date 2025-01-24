@@ -1,16 +1,20 @@
-import { Controller, Post, Body, Get, Req, UseGuards, InternalServerErrorException, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Body, Get, Req, UseGuards, InternalServerErrorException, BadRequestException, Headers } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiHeader } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiHeader, ApiBearerAuth } from '@nestjs/swagger';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { RegisterResponseDto } from './dto/register.response.dto';
 import { Request } from 'express';
 import { LoginDtoResponse } from './dto/login.response.dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { TokenRefreshResponse } from './dto/token-refresh.response.dto';
+import { User } from '@prisma/client';
 
 @ApiTags('auth')
 @Controller('auth')
+@ApiBearerAuth()
 export class AuthController {
     constructor(private readonly authService: AuthService) { }
 
@@ -71,6 +75,41 @@ export class AuthController {
             }
             throw error;
         }
+    }
+
+    @Post('refresh')
+    @ApiOperation({ summary: 'Refresh access token' })
+    @ApiBody({
+        schema: {
+            properties: {
+                refreshToken: { type: 'string' }
+            }
+        }
+    })
+    @ApiResponse({
+        status: 200,
+        description: 'New tokens generated successfully',
+        type: TokenRefreshResponse
+    })
+    @ApiResponse({
+        status: 401,
+        description: 'Invalid or expired refresh token'
+    })
+    async refreshToken(
+        @Body('refreshToken') refreshToken: string
+    ): Promise<TokenRefreshResponse> {
+        return this.authService.refreshToken(refreshToken);
+    }
+
+    @Post('logout')
+    @UseGuards(JwtAuthGuard)
+    @ApiOperation({ summary: 'Logout user' })
+    async logout(
+        @Headers('refresh-token') refreshToken: string,
+        @Req() req: Request & { user: User }
+    ) {
+        await this.authService.revokeRefreshToken(refreshToken);
+        return { message: 'Logged out successfully' };
     }
 
     @Get('google')

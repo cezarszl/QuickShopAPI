@@ -8,6 +8,7 @@ import * as bcrypt from 'bcrypt';
 import { User } from '@prisma/client';
 import { RegisterResponseDto } from './dto/register.response.dto';
 import { LoginDtoResponse } from './dto/login.response.dto';
+import { PrismaService } from 'src/prisma.service';
 
 
 
@@ -16,7 +17,30 @@ export class AuthService {
     constructor(
         private readonly userService: UserService,
         private readonly jwtService: JwtService,
+        private readonly prisma: PrismaService,
+
     ) { }
+
+    private async generateTokens(user: User) {
+        const accessToken = this.jwtService.sign(
+            { email: user.email, sub: user.id },
+            { expiresIn: '15m' }
+        );
+        const refreshToken = this.jwtService.sign(
+            { sub: user.id },
+            { expiresIn: '7d' }
+        );
+
+        await this.prisma.refreshToken.create({
+            data: {
+                token: refreshToken,
+                userId: user.id,
+                expiresAt: new Date(Date.now() + 7 * 24 * 3600 * 1000),
+            },
+        })
+
+        return { accessToken, refreshToken };
+    }
 
     async registerUser(registerDto: RegisterDto): Promise<RegisterResponseDto> {
         const { email, password, name, googleId } = registerDto;
@@ -34,12 +58,9 @@ export class AuthService {
             googleId,
         });
 
-        //Generating JWT
-        const payload: JwtPayload = { email: newUser.email, sub: newUser.id };
-        const accessToken = this.jwtService.sign(payload);
-
+        const tokens = await this.generateTokens(newUser);
         return {
-            accessToken,
+            ...tokens,
             user: {
                 id: newUser.id,
                 email: newUser.email,
@@ -79,12 +100,12 @@ export class AuthService {
         if (!user.password || !(await bcrypt.compare(password, user.password))) {
             throw new UnauthorizedException('Invalid credentials');
         }
-        //Generating JWT
-        const payload: JwtPayload = { email: user.email, sub: user.id };
-        const accessToken = this.jwtService.sign(payload);
+
+        const tokens = await this.generateTokens(user);
+
 
         return {
-            accessToken,
+            ...tokens,
             user: {
                 id: user.id,
                 email: user.email,
@@ -94,6 +115,40 @@ export class AuthService {
         };
     }
 
+    async refreshToken(token: string) {
+        try {
+            const payload = this.jwtService.verify(token);
+            const storedToken = await this.prisma.refreshToken.findUnique({
+                where: { token },
+                include: { user: true }
+            });
+
+            if (!storedToken || storedToken.revoked || storedToken.expiresAt < new Date()) {
+                throw new UnauthorizedException('Invalid refresh token');
+            }
+
+            // Unieważnij stary token
+            await this.prisma.refreshToken.update({
+                where: { id: storedToken.id },
+                data: { revoked: true }
+            });
+
+            return this.generateTokens(storedToken.user);
+        } catch {
+            throw new UnauthorizedException('Invalid refresh token');
+        }
+    }
+
+    async revokeRefreshToken(token: string) {
+        try {
+            await this.prisma.refreshToken.update({
+                where: { token },
+                data: { revoked: true }
+            });
+        } catch (error) {
+            throw new UnauthorizedException('Invalid token');
+        }
+    }
     // Not in use for now
     // async validateToken(token: string): Promise<User> {
     //     try {
