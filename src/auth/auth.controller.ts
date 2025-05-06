@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Req, UseGuards, InternalServerErrorException, BadRequestException, Headers } from '@nestjs/common';
+import { Controller, Post, Body, Get, Req, UseGuards, InternalServerErrorException, BadRequestException, Headers, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -6,7 +6,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiHeader, ApiBearerAuth }
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { RegisterResponseDto } from './dto/register.response.dto';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { LoginDtoResponse } from './dto/login.response.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { TokenRefreshResponse } from './dto/token-refresh.response.dto';
@@ -124,12 +124,20 @@ export class AuthController {
 
     @Get('google/callback')
     @UseGuards(GoogleAuthGuard)
-    @ApiOperation({ summary: 'Handle Google OAuth2 callback' })
-    @ApiResponse({ status: 200, description: 'Returns JWT token after successful Google login.', type: RegisterResponseDto })
-    @ApiResponse({ status: 400, description: 'Invalid Google login or failed to authenticate.' })
-    googleAuthRedirect(@Req() req: Request) {
+    async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
+        const authResult = req.user as {
+            access_token: string;
+            user: { email: string; name: string; googleId: string };
+        };
 
-        return req.user;
+        const { access_token, user } = authResult;
+
+        const frontendUrl = process.env.FRONTEND_URL
+        const redirectUrl = `${frontendUrl}/auth/google/callback?token=${access_token}&user=${encodeURIComponent(JSON.stringify(user))}`;
+
+        return res.redirect(redirectUrl);
     }
+
+
 
 }
