@@ -7,7 +7,7 @@ export class RegisterDto {
         example: 'user@example.com',
     })
     @IsEmail({}, { message: 'Invalid email format' })
-    @IsUnique('user', 'email')
+    // @IsUnique('user', 'email')
     email: string;
 
     @ApiProperty({

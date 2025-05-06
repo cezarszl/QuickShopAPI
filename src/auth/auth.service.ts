@@ -45,12 +45,13 @@ export class AuthService {
     async registerUser(registerDto: RegisterDto): Promise<RegisterResponseDto> {
         const { email, password, name, googleId } = registerDto;
 
-        //Hashing password
+        const existingUser = await this.userService.findUserByEmail(email);
+        if (existingUser) {
+            throw new ConflictException('User already exists');
+        }
 
         const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
 
-
-        //Creating a new user
         const newUser = await this.userService.createUser({
             email,
             password: hashedPassword,
@@ -65,10 +66,9 @@ export class AuthService {
                 id: newUser.id,
                 email: newUser.email,
                 name: newUser.name,
-                googleId: newUser.googleId
-            }
+                googleId: newUser.googleId,
+            },
         };
-
     }
 
     async validateGoogleUser({ email, name, googleId }: { email: string, name: string, googleId: string }): Promise<User> {
