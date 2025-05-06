@@ -127,13 +127,17 @@ export class AuthController {
     async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
         const authResult = req.user as {
             access_token: string;
+            refresh_token: string;
             user: { email: string; name: string; googleId: string };
         };
 
-        const { access_token, user } = authResult;
+        const { access_token, refresh_token, user } = authResult;
 
         const frontendUrl = process.env.FRONTEND_URL
-        const redirectUrl = `${frontendUrl}/auth/google/callback?token=${access_token}&user=${encodeURIComponent(JSON.stringify(user))}`;
+        const redirectUrl = `${frontendUrl}/auth/google/callback` +
+            `?token=${access_token}` +
+            `&refreshToken=${refresh_token}` +
+            `&user=${encodeURIComponent(JSON.stringify(user))}`;
 
         return res.redirect(redirectUrl);
     }
