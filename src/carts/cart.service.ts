@@ -193,17 +193,18 @@ export class CartService {
     }
 
     async mergeCarts(userId: number, anonymousCartId: string): Promise<boolean> {
-        const [userCart, anonymousCart] = await this.prisma.$transaction([
-            this.prisma.cart.findUnique({ where: { userId } }),
-            this.prisma.cart.findUnique({ where: { id: anonymousCartId } }),
-        ]);
+        let userCart = await this.prisma.cart.findUnique({ where: { userId } });
+        const anonymousCart = await this.prisma.cart.findUnique({ where: { id: anonymousCartId } });
+
 
         if (!anonymousCart) {
             throw new NotFoundException('Anonymous cart not found');
         }
 
         if (!userCart) {
-            throw new NotFoundException('User cart not found');
+            userCart = await this.prisma.cart.create({
+                data: { userId },
+            });
         }
 
         const anonymousCartItems = await this.prisma.cartItem.findMany({
