@@ -14,6 +14,14 @@ export class CartService {
 
         const { userId } = createCartDto;
 
+        if (userId) {
+            const existingCart = await this.prisma.cart.findFirst({
+                where: { userId },
+            });
+
+            if (existingCart) return existingCart;
+        }
+
         const cart = await this.prisma.cart.create({
             data: {
                 userId,
@@ -234,7 +242,15 @@ export class CartService {
             }
 
             await prisma.cartItem.deleteMany({ where: { cartId: anonymousCart.id } });
-            await prisma.cart.delete({ where: { id: anonymousCart.id } });
+            const stillExists = await prisma.cart.findUnique({
+                where: { id: anonymousCart.id },
+            });
+
+            if (stillExists) {
+                await prisma.cart.delete({
+                    where: { id: anonymousCart.id },
+                });
+            }
         });
 
         return true;
