@@ -34,6 +34,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
                 access_token: tokens.accessToken,
                 refresh_token: tokens.refreshToken,
                 user: {
+                    id: user.id,
                     email: user.email,
                     name: user.name,
                     googleId: user.googleId,
