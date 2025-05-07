@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,18 +8,19 @@ datasource db {
 }
 
 model User {
-  id         Int        @id @default(autoincrement())
-  email      String     @unique
-  password   String?
-  name       String
-  googleId   String?
-  facebookId String?
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  products   Product[]
-  cart       Cart[]
-  orders     Order[]
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
+  name          String
+  createdAt     DateTime       @default(now())
+  facebookId    String?
+  googleId      String?
+  password      String?
+  updatedAt     DateTime       @updatedAt
+  cart          Cart?
+  orders        Order[]
+  products      Product[]
   refreshTokens RefreshToken[]
+  favorites Favorite[]
 }
 
 model Product {
@@ -36,85 +31,96 @@ model Product {
   price       Float
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-  category   Category? @relation(fields: [categoryId], references: [id])
-  categoryId Int?
-  owner       User?      @relation(fields: [ownerId], references: [id])
   ownerId     Int?
-  cartItems    CartItem[]
-   brand       Brand?     @relation(fields: [brandId], references: [id])
+  categoryId  Int?
   brandId     Int?
-  color       Color?     @relation(fields: [colorId], references: [id])
   colorId     Int?
+  cartItems   CartItem[]
+  favoritedBy Favorite[]
+  brand       Brand?     @relation(fields: [brandId], references: [id])
+  category    Category?  @relation(fields: [categoryId], references: [id])
+  color       Color?     @relation(fields: [colorId], references: [id])
+  owner       User?      @relation(fields: [ownerId], references: [id])
 }
 
 model Category {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   products  Product[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Brand {
-  id        Int        @id @default(autoincrement())
-  name      String     @unique
-  products  Product[]
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  products Product[]
 }
 
 model Color {
-  id        Int        @id @default(autoincrement())
-  name      String     @unique
-  products  Product[]
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  products Product[]
 }
 
-
 model Cart {
-  id        String    @id @default(uuid())
-  userId    Int?      @unique
+  id        String     @id @default(uuid())
+  userId    Int?       @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  user      User?      @relation(fields: [userId], references: [id])
   items     CartItem[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  user      User?    @relation(fields: [userId], references: [id])
 
   @@index([userId])
-  @@index([createdAt]) 
+  @@index([createdAt])
 }
 
 model CartItem {
-  cartId     String
-  productId  Int
-  quantity   Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  cart       Cart      @relation(fields: [cartId], references: [id])
-  product    Product   @relation(fields: [productId], references: [id])
+  quantity  Int
+  productId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  cartId    String
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
 
   @@id([cartId, productId])
+  @@unique([cartId, productId])
   @@index([cartId])
   @@index([productId])
-  @@unique([cartId, productId]) 
 }
 
 model Order {
-  id          Int        @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   userId      Int
-  user        User       @relation(fields: [userId], references: [id])
-  items       Json       
+  items       Json
   totalAmount Float
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id])
 }
 
 model RefreshToken {
-   id String @id @default(uuid())
-   token String @unique
-   userId Int 
-   user User @relation(fields: [userId], references: [id])
-   expiresAt DateTime
-   revoked Boolean @default(false) 
-   createdAt DateTime @default(now())
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    Int
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
 
-   @@index([userId])
+  @@index([userId])
+}
+
+model Favorite {
+  userId    Int
+  productId Int
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@id([userId, productId])
+  @@index([userId])
+  @@index([productId])
 }
