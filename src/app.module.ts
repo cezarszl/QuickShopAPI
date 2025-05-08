@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProductService } from './products/product.service';
 import { ProductController } from './products/product.controller';
-import { PrismaService } from './prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { UserService } from './users/user.service';
 import { UserController } from './users/user.controller';
 import { CartService } from './carts/cart.service';
@@ -23,6 +23,7 @@ import { ColorService } from './colors/color.service';
 import { ColorController } from './colors/color.controller';
 import { DoesExistValidator } from './validators/does-exist.validator';
 import { IsUniqueValidator } from './validators/is-unique.validator';
+import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
   imports: [AuthModule, ServeStaticModule.forRoot({
@@ -31,7 +32,7 @@ import { IsUniqueValidator } from './validators/is-unique.validator';
     serveStaticOptions: {
       index: false,
     },
-  }),],
+  }), FavoritesModule,],
   controllers: [AppController, ProductController, UserController, CartController, OrderController, PaymentsController, CategoryController, BrandController, ColorController],
   providers: [AppService, ProductService, PrismaService, UserService, CartService, OrderService, PaymentsService, CategoryService, BrandService, ColorService, DoesExistValidator, IsUniqueValidator],
 })

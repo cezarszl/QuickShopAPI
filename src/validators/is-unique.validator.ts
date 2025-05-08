@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { ValidatorConstraint, ValidatorConstraintInterface } from "class-validator";
-import { PrismaService } from "src/prisma.service";
+import { PrismaService } from "prisma/prisma.service";
 
 @ValidatorConstraint({ name: 'IsUnique', async: true })
 @Injectable()
