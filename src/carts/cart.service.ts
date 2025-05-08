@@ -85,10 +85,6 @@ export class CartService {
             }
         });
 
-        if (!cartItems.length) {
-            throw new NotFoundException(`No cart items found for userId: ${userId}`);
-        }
-
         return cartItems;
     }
 
@@ -206,7 +202,7 @@ export class CartService {
 
 
         if (!anonymousCart) {
-            throw new NotFoundException('Anonymous cart not found');
+            return true;
         }
 
         if (!userCart) {

@@ -102,14 +102,15 @@ export class CartController {
     @ApiBearerAuth()
     @Get('users/:userId/cart')
     @ApiOperation({ summary: 'Get user cart items' })
-    @ApiResponse({ status: 200, description: 'Cart items retrieved successfully', type: [CartItemDto] })
-    @ApiResponse({ status: 404, description: 'Cart not found' })
+    @ApiResponse({ status: 200, description: 'Cart items retrieved successfully (can be empty)', type: [CartItemDto] })
+    @ApiResponse({ status: 404, description: 'Cart not found for user' }) // jeśli zostaje getUserCartOrThrow
     @ApiResponse({ status: 400, description: 'Invalid data provided' })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
     @ApiResponse({ status: 403, description: 'Forbidden' })
     async getUserCartItems(@Param('userId', ParseIntPipe) userId: number): Promise<CartItem[]> {
         return this.cartService.getCartItemsByUserId(userId);
     }
+
 
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()
