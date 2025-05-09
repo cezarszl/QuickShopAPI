@@ -45,6 +45,7 @@
     "reflect-metadata": "^0.2.0",
     "remove": "^0.1.5",
     "rxjs": "^7.8.1",
+    "sharp": "^0.34.1",
     "stripe": "^16.11.0",
     "ts-node": "^10.9.2"
   },

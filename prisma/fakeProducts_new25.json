@@ -1,0 +1,152 @@
+[
+  {
+    "name": "NoiseBlock Earbuds",
+    "price": 149.99,
+    "category": "electronics",
+    "description": "Compact wireless earbuds with active noise cancellation and charging case."
+  },
+  {
+    "name": "UltraHD Drone X",
+    "price": 599.99,
+    "category": "electronics",
+    "description": "4K drone with GPS tracking and long flight time for aerial photography."
+  },
+  {
+    "name": "Portable Power Bank 20000mAh",
+    "price": 49.99,
+    "category": "electronics",
+    "description": "High-capacity portable charger for phones and tablets with fast charging support."
+  },
+  {
+    "name": "Smart Thermostat V3",
+    "price": 179.99,
+    "category": "electronics",
+    "description": "Energy-efficient smart thermostat compatible with voice assistants."
+  },
+  {
+    "name": "Gaming Mouse GX9",
+    "price": 69.99,
+    "category": "electronics",
+    "description": "Ergonomic gaming mouse with customizable DPI and RGB lighting."
+  },
+  {
+    "name": "Women's Trench Coat",
+    "price": 139.99,
+    "category": "clothing",
+    "description": "Elegant and water-resistant trench coat for a sophisticated look."
+  },
+  {
+    "name": "Men's Slim Fit Blazer",
+    "price": 159.99,
+    "category": "clothing",
+    "description": "Modern blazer suitable for both business and casual wear."
+  },
+  {
+    "name": "Unisex Hoodie Classic",
+    "price": 59.99,
+    "category": "clothing",
+    "description": "Comfortable hoodie made from organic cotton with a relaxed fit."
+  },
+  {
+    "name": "Baby Bodysuit Pack",
+    "price": 34.99,
+    "category": "clothing",
+    "description": "Set of 5 soft cotton bodysuits for newborns and infants."
+  },
+  {
+    "name": "Athletic Socks (5-pack)",
+    "price": 19.99,
+    "category": "clothing",
+    "description": "Moisture-wicking sports socks ideal for workouts and running."
+  },
+  {
+    "name": "Space Explorers - Kids Edition",
+    "price": 11.99,
+    "category": "books",
+    "description": "Illustrated space adventure book for children aged 6–10."
+  },
+  {
+    "name": "Mindset & Motivation",
+    "price": 17.99,
+    "category": "books",
+    "description": "Inspiring book on building positive habits and achieving goals."
+  },
+  {
+    "name": "Cooking for Beginners",
+    "price": 21.99,
+    "category": "books",
+    "description": "Step-by-step recipes and cooking basics for newcomers to the kitchen."
+  },
+  {
+    "name": "Crime & Justice: A Detective Story",
+    "price": 14.49,
+    "category": "books",
+    "description": "Gripping detective mystery set in a gritty urban environment."
+  },
+  {
+    "name": "World Atlas for Curious Minds",
+    "price": 27.99,
+    "category": "books",
+    "description": "Educational and colorful atlas for readers interested in geography."
+  },
+  {
+    "name": "Magic Wand Toy",
+    "price": 14.99,
+    "category": "toys",
+    "description": "Light-up toy wand with magical sound effects and glitter finish."
+  },
+  {
+    "name": "Mini Kitchen Playset",
+    "price": 54.99,
+    "category": "toys",
+    "description": "Realistic toy kitchen with accessories for pretend cooking fun."
+  },
+  {
+    "name": "Stacking Rainbow Rings",
+    "price": 12.99,
+    "category": "toys",
+    "description": "Colorful ring stacking toy to develop motor skills in toddlers."
+  },
+  {
+    "name": "Board Game: Jungle Escape",
+    "price": 34.99,
+    "category": "toys",
+    "description": "Family-friendly board game with fun jungle-themed challenges."
+  },
+  {
+    "name": "Bubble Blaster 3000",
+    "price": 19.99,
+    "category": "toys",
+    "description": "Automatic bubble gun that creates hundreds of bubbles per minute."
+  },
+  {
+    "name": "Minimalist TV Stand",
+    "price": 189.99,
+    "category": "furniture",
+    "description": "Modern TV stand with open shelves and cable management system."
+  },
+  {
+    "name": "Corner Bookshelf Ladder",
+    "price": 119.99,
+    "category": "furniture",
+    "description": "Stylish corner bookshelf in ladder design for compact storage."
+  },
+  {
+    "name": "Upholstered Dining Chair Set (2 pcs)",
+    "price": 229.99,
+    "category": "furniture",
+    "description": "Comfortable and elegant dining chairs with cushioned seats."
+  },
+  {
+    "name": "Vanity Table with Mirror",
+    "price": 279.99,
+    "category": "furniture",
+    "description": "Compact vanity table with drawers and LED-lit mirror."
+  },
+  {
+    "name": "Folding Storage Ottoman",
+    "price": 59.99,
+    "category": "furniture",
+    "description": "Multifunctional ottoman with hidden storage space inside."
+  }
+]
