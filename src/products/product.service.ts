@@ -16,6 +16,7 @@ export class ProductService {
     // Find all products based on filters
     async findAll(filters: {
         categoryId?: number;
+        categoryName?: string;
         colorId?: number;
         brandIds?: number[];
         name?: string;
@@ -27,12 +28,21 @@ export class ProductService {
         offset?: number;
     }): Promise<{ products: Product[]; totalCount: number }> {
 
-        const { categoryId, colorId, brandIds, name, minPrice, maxPrice, sortBy, order, limit, offset } = filters;
+        const { categoryId, categoryName, colorId, brandIds, name, minPrice, maxPrice, sortBy, order, limit, offset } = filters;
 
         const where: Prisma.ProductWhereInput = {};
 
         if (categoryId)
             where.categoryId = categoryId;
+
+        if (categoryName) {
+            where.category = {
+                name: {
+                    equals: categoryName,
+                    mode: 'insensitive',
+                },
+            };
+        }
 
         if (colorId)
             where.colorId = colorId;

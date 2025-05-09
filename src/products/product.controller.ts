@@ -20,6 +20,7 @@ export class ProductController {
     @ApiResponse({ status: 200, description: 'List of all products', type: ProductsResponseDto })
     @ApiQuery({ name: 'name', required: false, type: String })
     @ApiQuery({ name: 'categoryId', required: false, type: Number })
+    @ApiQuery({ name: 'categoryName', required: false, type: String })
     @ApiQuery({ name: 'colorId', required: false, type: Number })
     @ApiQuery({ name: 'brandIds', required: false, type: [Number], isArray: true, description: 'Array of Brand IDs' })
     @ApiQuery({ name: 'minPrice', required: false, type: Number })
@@ -30,6 +31,7 @@ export class ProductController {
     @ApiQuery({ name: 'offset', required: false, type: Number, description: 'Skip the first N products' })
     async findAll(
         @Query('categoryId') categoryId?: number,
+        @Query('categoryName') categoryName?: string,
         @Query('colorId') colorId?: number,
         @Query('brandIds') brandIds?: string,
         @Query('name') name?: string,
@@ -42,19 +44,22 @@ export class ProductController {
     ): Promise<{ products: Product[]; totalCount: number }> {
         const filters = {
             categoryId,
+            categoryName,
             colorId,
             brandIds: brandIds ? brandIds.split(',').map(id => parseInt(id, 10)) : undefined,
             name,
             maxPrice: maxPrice ? parseFloat(maxPrice) : undefined,
             minPrice: minPrice ? parseFloat(minPrice) : undefined,
-            sortBy: sortBy,
-            order: order,
+            sortBy,
+            order,
             limit: limit ? parseInt(limit, 10) : undefined,
             offset: offset ? parseInt(offset, 10) : undefined,
-        }
+        };
+
         const { products, totalCount } = await this.productService.findAll(filters);
         return { products, totalCount };
     }
+
 
 
 
