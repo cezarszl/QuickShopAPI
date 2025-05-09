@@ -14,6 +14,14 @@ export class ProductController {
     constructor(private readonly productService: ProductService,
     ) { }
 
+    // Get new products this week
+    @Get('new-this-week')
+    @ApiOperation({ summary: 'Get products added in the last 7 days' })
+    @ApiResponse({ status: 200, description: 'List of recent products.' })
+    async getNewProductsThisWeek() {
+        return this.productService.getNewProductsThisWeek();
+    }
+
     // Get all products
     @Get()
     @ApiOperation({ summary: 'Retrieve all products' })
@@ -123,4 +131,5 @@ export class ProductController {
     async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
         await this.productService.delete(id);
     }
+
 }

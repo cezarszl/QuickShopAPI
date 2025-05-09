@@ -167,4 +167,22 @@ export class ProductService {
 
         return randomProducts.filter(product => product !== null);
     }
+
+    // Get products added within last week
+
+    async getNewProductsThisWeek(): Promise<Product[]> {
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+        return this.prisma.product.findMany({
+            where: {
+                createdAt: {
+                    gte: oneWeekAgo,
+                },
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
+        })
+    }
 }
