@@ -1,6 +1,6 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { Product } from '@prisma/client';
+import { Prisma, Product } from '@prisma/client';
 import { CreateProductDto } from './dto/create.product.dto';
 import { UpdateProductDto } from './dto/update.product.dto';
 
@@ -29,7 +29,7 @@ export class ProductService {
 
         const { categoryId, colorId, brandIds, name, minPrice, maxPrice, sortBy, order, limit, offset } = filters;
 
-        const where: any = {};
+        const where: Prisma.ProductWhereInput = {};
 
         if (categoryId)
             where.categoryId = categoryId;
@@ -48,24 +48,35 @@ export class ProductService {
             };
         }
 
+        const price: Prisma.FloatFilter = {};
+
         if (minPrice !== undefined) {
-            where.price = { ...where.price, gte: minPrice };
+            price.gte = minPrice;
         }
-
         if (maxPrice !== undefined) {
-            where.price = { ...where.price, lte: maxPrice };
+            price.lte = maxPrice;
         }
 
-        const orderBy: any = {};
-
-        if (sortBy) {
-            orderBy[sortBy] = order && order.toUpperCase() === 'DESC' ? 'desc' : 'asc';
+        if (Object.keys(price).length > 0) {
+            where.price = price;
         }
+
+        let orderBy: Prisma.ProductOrderByWithRelationInput | undefined = undefined;
+
+        const allowedSortFields = ['price', 'name', 'createdAt', 'id']; // dopasuj do modelu
+        if (sortBy && allowedSortFields.includes(sortBy)) {
+            orderBy = {
+                [sortBy]: order?.toUpperCase() === 'DESC' ? 'desc' : 'asc'
+            } as Prisma.ProductOrderByWithRelationInput;
+        }
+
+        const take = limit ?? 20;
+        const skip = offset ?? 0;
 
         const products = await this.prisma.product.findMany({
             where,
-            skip: offset,
-            take: limit,
+            skip: skip,
+            take: take,
             orderBy: sortBy ? orderBy : undefined,
         });
 
