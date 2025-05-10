@@ -9,18 +9,23 @@ type ProductWithCategoryName = Product & {
     categoryName?: string | null;
     brandName?: string | null;
     colorName?: string | null;
-    category?: undefined
-    brand?: undefined
-    color?: undefined
-}
+    category?: undefined;
+    brand?: undefined;
+    color?: undefined;
+};
 
 @Injectable()
 export class ProductService {
-    constructor(private readonly prisma: PrismaService,
+    constructor(
+        private readonly prisma: PrismaService,
         private readonly configService: ConfigService
     ) { }
 
-    // Find all products based on filters
+    private prependBaseUrl(imageUrl: string): string {
+        const baseUrl = this.configService.get<string>('BASE_URL') ?? '';
+        return `${baseUrl}${new URL(imageUrl, 'http://dummy').pathname}`;
+    }
+
     async findAll(filters: {
         categoryId?: number;
         categoryName?: string;
@@ -36,13 +41,25 @@ export class ProductService {
         limit?: number;
         offset?: number;
     }): Promise<{ products: Product[]; totalCount: number }> {
-
-        const { categoryId, categoryName, colorId, colorName, brandIds, brandName, name, minPrice, maxPrice, sortBy, order, limit, offset } = filters;
+        const {
+            categoryId,
+            categoryName,
+            colorId,
+            colorName,
+            brandIds,
+            brandName,
+            name,
+            minPrice,
+            maxPrice,
+            sortBy,
+            order,
+            limit,
+            offset,
+        } = filters;
 
         const where: Prisma.ProductWhereInput = {};
 
-        if (categoryId)
-            where.categoryId = categoryId;
+        if (categoryId) where.categoryId = categoryId;
 
         if (categoryName) {
             where.category = {
@@ -53,8 +70,7 @@ export class ProductService {
             };
         }
 
-        if (colorId)
-            where.colorId = colorId;
+        if (colorId) where.colorId = colorId;
 
         if (colorName) {
             where.color = {
@@ -66,7 +82,7 @@ export class ProductService {
         }
 
         if (brandIds && brandIds.length > 0) {
-            where.brandId = { in: brandIds }
+            where.brandId = { in: brandIds };
         }
 
         if (brandName) {
@@ -86,24 +102,15 @@ export class ProductService {
         }
 
         const price: Prisma.FloatFilter = {};
-
-        if (minPrice !== undefined) {
-            price.gte = minPrice;
-        }
-        if (maxPrice !== undefined) {
-            price.lte = maxPrice;
-        }
-
-        if (Object.keys(price).length > 0) {
-            where.price = price;
-        }
+        if (minPrice !== undefined) price.gte = minPrice;
+        if (maxPrice !== undefined) price.lte = maxPrice;
+        if (Object.keys(price).length > 0) where.price = price;
 
         let orderBy: Prisma.ProductOrderByWithRelationInput | undefined = undefined;
-
-        const allowedSortFields = ['price', 'name', 'createdAt', 'id']; // dopasuj do modelu
+        const allowedSortFields = ['price', 'name', 'createdAt', 'id'];
         if (sortBy && allowedSortFields.includes(sortBy)) {
             orderBy = {
-                [sortBy]: order?.toUpperCase() === 'DESC' ? 'desc' : 'asc'
+                [sortBy]: order?.toUpperCase() === 'DESC' ? 'desc' : 'asc',
             } as Prisma.ProductOrderByWithRelationInput;
         }
 
@@ -112,22 +119,25 @@ export class ProductService {
 
         const products = await this.prisma.product.findMany({
             where,
-            skip: skip,
-            take: take,
+            skip,
+            take,
             orderBy: sortBy ? orderBy : undefined,
         });
 
-        const totalCount = await this.prisma.product.count({
-            where,
-        });
+        const baseUrl = this.configService.get<string>('BASE_URL') ?? '';
+        const processed = products.map(p => ({
+            ...p,
+            imageUrl: this.prependBaseUrl(p.imageUrl),
+        }));
+
+        const totalCount = await this.prisma.product.count({ where });
 
         return {
-            products,
+            products: processed,
             totalCount,
         };
     }
 
-    // Find specific product by id
     async findOne(id: number): Promise<ProductWithCategoryName> {
         const product = await this.prisma.product.findUnique({
             where: { id },
@@ -135,38 +145,31 @@ export class ProductService {
                 category: true,
                 brand: true,
                 color: true,
-            }
+            },
         });
+
         if (!product) {
             throw new NotFoundException(`Product with ID ${id} not found`);
         }
 
-
-        const baseUrl = this.configService.get<string>('BASE_URL') ?? '';
         return {
             ...product,
-            imageUrl: product.imageUrl.startsWith('http')
-                ? product.imageUrl
-                : `${baseUrl}${product.imageUrl}`,
+            imageUrl: this.prependBaseUrl(product.imageUrl),
             categoryName: product.category?.name || null,
             brandName: product.brand?.name || null,
             colorName: product.color?.name || null,
             category: undefined,
             brand: undefined,
             color: undefined,
-
-
         };
     }
 
-    // Create a product
     async create(createProductDto: CreateProductDto): Promise<Product> {
         return this.prisma.product.create({
-            data: createProductDto
+            data: createProductDto,
         });
     }
 
-    // Delete a product by id
     async delete(id: number): Promise<void> {
         try {
             await this.prisma.product.delete({
@@ -177,7 +180,6 @@ export class ProductService {
         }
     }
 
-    // Update a product by id
     async update(id: number, updateProductDto: UpdateProductDto): Promise<Product> {
         try {
             return await this.prisma.product.update({
@@ -189,35 +191,33 @@ export class ProductService {
         }
     }
 
-    // Get random product from each category
     async getRandomProductsFromEachCategory(): Promise<ProductWithCategoryName[]> {
         const categories = await this.prisma.category.findMany({
             include: { products: true },
         });
 
-        const randomProducts = categories.map(category => {
-            const products = category.products;
-            if (products.length > 0) {
-                const randomIndex = Math.floor(Math.random() * products.length);
-                const randomProduct = products[randomIndex];
-                return {
-                    ...randomProduct,
-                    categoryName: category.name
-                };
-            }
-            return null;
-        });
-
-        return randomProducts.filter(product => product !== null);
+        return categories
+            .map(category => {
+                const products = category.products;
+                if (products.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * products.length);
+                    const randomProduct = products[randomIndex];
+                    return {
+                        ...randomProduct,
+                        imageUrl: this.prependBaseUrl(randomProduct.imageUrl),
+                        categoryName: category.name,
+                    };
+                }
+                return null;
+            })
+            .filter(product => product !== null);
     }
-
-    // Get products added within last week
 
     async getNewProductsThisWeek(): Promise<Product[]> {
         const oneWeekAgo = new Date();
         oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
-        return this.prisma.product.findMany({
+        const products = await this.prisma.product.findMany({
             where: {
                 createdAt: {
                     gte: oneWeekAgo,
@@ -226,6 +226,11 @@ export class ProductService {
             orderBy: {
                 createdAt: 'desc',
             },
-        })
+        });
+
+        return products.map(p => ({
+            ...p,
+            imageUrl: this.prependBaseUrl(p.imageUrl),
+        }));
     }
 }
