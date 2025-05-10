@@ -30,7 +30,9 @@ export class ProductController {
     @ApiQuery({ name: 'categoryId', required: false, type: Number })
     @ApiQuery({ name: 'categoryName', required: false, type: String })
     @ApiQuery({ name: 'colorId', required: false, type: Number })
+    @ApiQuery({ name: 'colorName', required: false, type: String })
     @ApiQuery({ name: 'brandIds', required: false, type: [Number], isArray: true, description: 'Array of Brand IDs' })
+    @ApiQuery({ name: 'brandName', required: false, type: String })
     @ApiQuery({ name: 'minPrice', required: false, type: Number })
     @ApiQuery({ name: 'maxPrice', required: false, type: Number })
     @ApiQuery({ name: 'sortBy', required: false, type: String })
@@ -41,7 +43,9 @@ export class ProductController {
         @Query('categoryId') categoryId?: number,
         @Query('categoryName') categoryName?: string,
         @Query('colorId') colorId?: number,
+        @Query('colorName') colorName?: string,
         @Query('brandIds') brandIds?: string,
+        @Query('brandName') brandName?: string,
         @Query('name') name?: string,
         @Query('minPrice') minPrice?: string,
         @Query('maxPrice') maxPrice?: string,
@@ -54,7 +58,9 @@ export class ProductController {
             categoryId,
             categoryName,
             colorId,
+            colorName,
             brandIds: brandIds ? brandIds.split(',').map(id => parseInt(id, 10)) : undefined,
+            brandName,
             name,
             maxPrice: maxPrice ? parseFloat(maxPrice) : undefined,
             minPrice: minPrice ? parseFloat(minPrice) : undefined,

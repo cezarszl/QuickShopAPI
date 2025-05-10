@@ -18,7 +18,9 @@ export class ProductService {
         categoryId?: number;
         categoryName?: string;
         colorId?: number;
+        colorName?: string;
         brandIds?: number[];
+        brandName?: string;
         name?: string;
         minPrice?: number;
         maxPrice?: number;
@@ -28,7 +30,7 @@ export class ProductService {
         offset?: number;
     }): Promise<{ products: Product[]; totalCount: number }> {
 
-        const { categoryId, categoryName, colorId, brandIds, name, minPrice, maxPrice, sortBy, order, limit, offset } = filters;
+        const { categoryId, categoryName, colorId, colorName, brandIds, brandName, name, minPrice, maxPrice, sortBy, order, limit, offset } = filters;
 
         const where: Prisma.ProductWhereInput = {};
 
@@ -47,8 +49,26 @@ export class ProductService {
         if (colorId)
             where.colorId = colorId;
 
+        if (colorName) {
+            where.color = {
+                name: {
+                    equals: colorName,
+                    mode: 'insensitive',
+                },
+            };
+        }
+
         if (brandIds && brandIds.length > 0) {
             where.brandId = { in: brandIds }
+        }
+
+        if (brandName) {
+            where.brand = {
+                name: {
+                    equals: brandName,
+                    mode: 'insensitive',
+                },
+            };
         }
 
         if (name) {
