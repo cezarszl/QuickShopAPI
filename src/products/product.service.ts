@@ -6,7 +6,11 @@ import { UpdateProductDto } from './dto/update.product.dto';
 
 type ProductWithCategoryName = Product & {
     categoryName?: string | null;
+    brandName?: string | null;
+    colorName?: string | null;
     category?: undefined
+    brand?: undefined
+    color?: undefined
 }
 
 @Injectable()
@@ -124,7 +128,11 @@ export class ProductService {
     async findOne(id: number): Promise<ProductWithCategoryName> {
         const product = await this.prisma.product.findUnique({
             where: { id },
-            include: { category: true }
+            include: {
+                category: true,
+                brand: true,
+                color: true,
+            }
         });
         if (!product) {
             throw new NotFoundException(`Product with ID ${id} not found`);
@@ -132,7 +140,13 @@ export class ProductService {
         return {
             ...product,
             categoryName: product.category?.name || null,
-            category: undefined
+            brandName: product.brand?.name,
+            colorName: product.color?.name,
+            category: undefined,
+            brand: undefined,
+            color: undefined,
+
+
         };
     }
 
