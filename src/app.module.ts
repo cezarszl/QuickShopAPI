@@ -24,9 +24,12 @@ import { ColorController } from './colors/color.controller';
 import { DoesExistValidator } from './validators/does-exist.validator';
 import { IsUniqueValidator } from './validators/is-unique.validator';
 import { FavoritesModule } from './favorites/favorites.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [AuthModule, ServeStaticModule.forRoot({
+  imports: [AuthModule, ConfigModule.forRoot({
+    isGlobal: true,
+  }), ServeStaticModule.forRoot({
     rootPath: join(process.cwd(), 'assets', 'images'),
     serveRoot: '/images',
     serveStaticOptions: {

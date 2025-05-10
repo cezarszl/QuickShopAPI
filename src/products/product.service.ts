@@ -3,6 +3,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { Prisma, Product } from '@prisma/client';
 import { CreateProductDto } from './dto/create.product.dto';
 import { UpdateProductDto } from './dto/update.product.dto';
+import { ConfigService } from '@nestjs/config';
 
 type ProductWithCategoryName = Product & {
     categoryName?: string | null;
@@ -15,7 +16,9 @@ type ProductWithCategoryName = Product & {
 
 @Injectable()
 export class ProductService {
-    constructor(private readonly prisma: PrismaService) { }
+    constructor(private readonly prisma: PrismaService,
+        private readonly configService: ConfigService
+    ) { }
 
     // Find all products based on filters
     async findAll(filters: {
@@ -137,11 +140,17 @@ export class ProductService {
         if (!product) {
             throw new NotFoundException(`Product with ID ${id} not found`);
         }
+
+
+        const baseUrl = this.configService.get<string>('BASE_URL') ?? '';
         return {
             ...product,
+            imageUrl: product.imageUrl.startsWith('http')
+                ? product.imageUrl
+                : `${baseUrl}${product.imageUrl}`,
             categoryName: product.category?.name || null,
-            brandName: product.brand?.name,
-            colorName: product.color?.name,
+            brandName: product.brand?.name || null,
+            colorName: product.color?.name || null,
             category: undefined,
             brand: undefined,
             color: undefined,
