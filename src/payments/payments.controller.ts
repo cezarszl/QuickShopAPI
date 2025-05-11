@@ -1,19 +1,19 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { PaymentsService } from './payments.service';
-import { CreatePaymentDto } from './dto/create.payment.dto';
+import { CreateCheckoutSessionDto } from './dto/create.payment.dto';
 
 @ApiTags('payments')
 @Controller('payments')
 export class PaymentsController {
     constructor(private readonly paymentsService: PaymentsService) { }
 
-    @Post()
+    @Post('checkout-session')
     @HttpCode(HttpStatus.CREATED)
-    @ApiOperation({ summary: 'Create a new payment' })
-    @ApiResponse({ status: 201, description: 'Payment has been successfully created.' })
-    @ApiResponse({ status: 400, description: 'Invalid payment request.' })
-    async createPayment(@Body() createPaymentDto: CreatePaymentDto) {
-        return this.paymentsService.createPayment(createPaymentDto);
+    @ApiOperation({ summary: 'Create a Stripe Checkout Session' })
+    @ApiResponse({ status: 201, description: 'Stripe session created, returns session URL.' })
+    @ApiResponse({ status: 401, description: 'Unauthorized - missing or invalid JWT.' })
+    async createCheckoutSession(@Body() createPayment: CreateCheckoutSessionDto) {
+        return this.paymentsService.createCheckoutSession(createPayment.cart, createPayment.customer);
     }
 }

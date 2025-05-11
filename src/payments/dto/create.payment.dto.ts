@@ -1,20 +1,77 @@
+import { IsArray, IsEmail, IsNotEmpty, ValidateNested, IsNumber, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
 
-export class CreatePaymentDto {
-    @ApiProperty({ description: 'Amount to be charged in cents' })
+export class CartItemDto {
+    @ApiProperty({ example: 'NoiseBlock Earbuds' })
+    @IsString()
+    @IsNotEmpty()
+    name: string;
+
+    @ApiProperty({ example: 149.99 })
     @IsNumber()
-    amount: number;
+    @IsNotEmpty()
+    price: number;
 
-    @ApiProperty({ description: 'Currency for the payment' })
-    @IsString()
-    currency: string;
+    @ApiProperty({ example: 1, required: false })
+    @IsOptional()
+    @IsNumber()
+    quantity?: number;
+}
 
-    @ApiProperty({ description: 'Source token for payment' })
+export class CustomerDto {
+    @ApiProperty({ example: 'John' })
     @IsString()
-    source: string;
+    @IsNotEmpty()
+    firstName: string;
 
-    @ApiProperty({ description: 'Description of the payment' })
+    @ApiProperty({ example: 'Doe' })
     @IsString()
-    description: string;
+    @IsNotEmpty()
+    lastName: string;
+
+    @ApiProperty({ example: 'Acme Inc.' })
+    @IsString()
+    @IsNotEmpty()
+    companyName: string;
+
+    @ApiProperty({ example: 'john.doe@example.com' })
+    @IsEmail()
+    email: string;
+
+    @ApiProperty({ example: 'PL' })
+    @IsString()
+    @IsNotEmpty()
+    country: string;
+}
+
+export class CreateCheckoutSessionDto {
+    @ApiProperty({
+        type: CustomerDto,
+        example: {
+            firstName: 'John',
+            lastName: 'Doe',
+            companyName: 'Acme Inc.',
+            email: 'john.doe@example.com',
+            country: 'PL',
+        },
+    })
+    @ValidateNested()
+    @Type(() => CustomerDto)
+    customer: CustomerDto;
+
+    @ApiProperty({
+        type: [CartItemDto],
+        example: [
+            {
+                name: 'NoiseBlock Earbuds',
+                price: 149.99,
+                quantity: 2,
+            },
+        ],
+    })
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => CartItemDto)
+    cart: CartItemDto[];
 }
