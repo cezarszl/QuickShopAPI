@@ -1,48 +1,45 @@
-# Overview
-QuickShop API is a RESTful API built using NestJS and Prisma that allows users to manage products, users, orders, and cart items within a shop. It provides endpoints for creating, reading, updating, and deleting products, users, managing cart items, and handling orders. The API also includes authentication with JWT and Google OAuth2, along with payment integration using Stripe. The application is using Docker, with PostgreSQL running as the database.
+# QuickShop API
 
-## Features
-### User Management:
-- Create, read, and delete user profiles.
-- Google OAuth2 login and registration.
+The **QuickShop API** is a RESTful backend built with **NestJS** and **Prisma ORM**, designed to power an e-commerce platform. It supports user authentication (including Google OAuth2), product and cart management, Stripe-based payments, and order processing – all running in a Dockerized environment with a PostgreSQL database.
 
-### Product Management:
-- Create, read, update, and delete products.
+## 🚀 Features
 
-### Cart Management:
-- Add items to the cart.
-- Remove items from the cart.
-- Update the quantity of items in the cart.
-- Retrieve all items in the cart for a specific user.
+### 👤 User Authentication
+- JWT-based authentication
+- Google OAuth2 login & registration
 
-### Order Management:
-- Create and process new orders.
-- Retrieve order details for users.
-- Handle order status updates.
+### 🛍️ Product Management
+- Add, update, delete, and list products
+- Filter by category, brand, color, price range
 
-### Payment Integration:
-- Handle payments using Stripe API.
-- Endpoint to initiate payments with fake data or demo Stripe payments.
+### 🛒 Cart System
+- Anonymous + user-bound cart support
+- Add/update/remove items
+- Merge cart on login
 
-### Authentication:
-- JWT-based authentication.
-- Google OAuth2 login and registration.
+### 💳 Stripe Payments
+- Create Stripe checkout sessions
+- Test card support for demo purchases
 
-### Database Integration:
-- Prisma is used as the ORM to interact with the database, which is running in a Docker container with PostgreSQL.
+### 📦 Orders
+- Create orders after successful payment
+- List orders per user
+- Store product quantity and amount per order
 
-### Swagger Documentation:
-- API documentation generated using Swagger for better development and testing.
+### 🧰 Dev Features
+- Swagger API docs (auto-generated)
+- Prisma ORM for DB access
+- Docker + PostgreSQL
 
-## Documentation
-- [QuickShop API Swagger Docs](https://quickshopapi-844fd64d6465.herokuapp.com/api) - See full API documentation online.
+## 📄 API Documentation
 
-## Progress Tracking
-- You can track the progress of this project on [Trello](https://trello.com/invite/b/66d020cfa5c358f331c3c2f8/ATTId951596145cea872dad191e72980677377CA810F/quickshop-api).
+🔗 [**View Swagger Docs**](https://quickshopapi-844fd64d6465.herokuapp.com/api)
 
-## Technologies
-- **NestJS** - A progressive Node.js framework for building efficient, reliable, and scalable server-side applications.
-- **Prisma** - A next-generation ORM that can be used to build GraphQL, REST, and gRPC APIs.
-- **Stripe** - Payment processing for handling online payments.
-- **Swagger** - Used for API documentation.
-- **Docker** - Used for containerization of the application and running PostgreSQL.
+## 🧱 Tech Stack
+
+- **NestJS** – TypeScript backend framework
+- **Prisma** – ORM for PostgreSQL
+- **Stripe** – Payment processing integration
+- **Swagger** – REST API documentation
+- **Docker** – Containerization & DB hosting
+- **PostgreSQL** – Relational database
