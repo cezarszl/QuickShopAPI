@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OrderService } from './order.service';
 import { Order } from '@prisma/client';
@@ -15,6 +15,7 @@ export class OrderController {
     constructor(private readonly orderService: OrderService) { }
 
     @Post()
+    @HttpCode(HttpStatus.CREATED)
     @ApiOperation({ summary: 'Create a new order' })
     @ApiResponse({ status: 201, description: 'Order created successfully.', type: OrderDto })
     @ApiBody({ type: CreateOrderDto })

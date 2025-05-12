@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty, IsPositive, IsNumber, IsObject } from 'class-validator';
+import { IsInt, IsNotEmpty, IsPositive, IsNumber, ValidateNested, ArrayMinSize, IsArray } from 'class-validator';
+import { Type } from 'class-transformer';
+import { OrderItemDto } from './order.dto';
 
 export class CreateOrderDto {
     @ApiProperty({ example: 1, description: 'ID of the user placing the order' })
@@ -8,13 +10,17 @@ export class CreateOrderDto {
     @IsPositive({ message: 'User ID must be a positive integer' })
     userId: number;
 
-    @IsObject()
-    @IsNotEmpty({ message: 'Items should not be empty' })
-    @ApiProperty({ type: 'object', description: 'JSON object representing items in the order' })
-    items: any;
+    @ApiProperty({
+        type: [OrderItemDto],
+        description: 'List of items in the order (productId & quantity)',
+    })
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => OrderItemDto)
+    items: OrderItemDto[];
 
-    @ApiProperty({ example: 150.00, description: 'Total amount for the order' })
-    @IsNumber({}, { message: 'Total amount must be a number' })
-    @IsPositive({ message: 'Total amount must be a positive number' })
+    @ApiProperty({ example: 150.0, description: 'Total amount for the order' })
+    @IsNumber()
+    @IsPositive()
     totalAmount: number;
 }

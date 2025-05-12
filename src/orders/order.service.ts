@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service'
 import { CreateOrderDto } from './dto/create.order.dto';
-import { Order } from '@prisma/client';
+import { Order, Prisma } from '@prisma/client';
 import { UserService } from 'src/users/user.service';
 
 
@@ -14,7 +14,17 @@ export class OrderService {
 
 
     async createOrder(createOrderDto: CreateOrderDto): Promise<Order> {
-        return await this.prisma.order.create({ data: createOrderDto, })
+        const { items, totalAmount, userId } = createOrderDto;
+
+        return await this.prisma.order.create({
+            data: {
+                items: JSON.parse(JSON.stringify(items)),
+                totalAmount,
+                user: {
+                    connect: { id: userId },
+                },
+            },
+        });
     }
 
     async getUserOrders(userId: number): Promise<Order[]> {
