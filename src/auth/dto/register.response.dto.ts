@@ -13,6 +13,9 @@ class UserInfoDto {
 
     @ApiProperty({ description: 'Google ID if registered via Google', required: false })
     googleId?: string;
+
+    @ApiProperty({ example: '2024-09-02T23:55:19.354Z', description: 'Timestamp when the user was created' })
+    createdAt: Date;
 }
 
 export class RegisterResponseDto {

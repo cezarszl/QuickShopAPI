@@ -65,6 +65,7 @@ export class AuthService {
                 id: newUser.id,
                 email: newUser.email,
                 name: newUser.name,
+                createdAt: newUser.createdAt,
                 googleId: newUser.googleId,
             },
         };
@@ -88,7 +89,7 @@ export class AuthService {
     }
 
     async login(loginDto: LoginDto): Promise<LoginDtoResponse> {
-        const { email, password } = loginDto;
+        const { email, password, } = loginDto;
 
         //Finding use by email
         const user = await this.userService.findUserByEmail(email);
@@ -109,6 +110,7 @@ export class AuthService {
                 id: user.id,
                 email: user.email,
                 name: user.name,
+                createdAt: user.createdAt,
                 googleId: user.googleId
             }
         };

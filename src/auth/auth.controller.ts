@@ -128,7 +128,7 @@ export class AuthController {
         const authResult = req.user as {
             access_token: string;
             refresh_token: string;
-            user: { email: string; name: string; googleId: string };
+            user: { email: string; name: string; createdAt: string; googleId: string };
         };
 
         const { access_token, refresh_token, user } = authResult;

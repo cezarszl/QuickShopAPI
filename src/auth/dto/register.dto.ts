@@ -1,13 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString, MinLength, IsOptional } from 'class-validator';
-import { IsUnique } from 'src/decorators/is-unique.decorator';
 export class RegisterDto {
     @ApiProperty({
         description: 'Email of the user',
         example: 'user@example.com',
     })
     @IsEmail({}, { message: 'Invalid email format' })
-    // @IsUnique('user', 'email')
     email: string;
 
     @ApiProperty({
@@ -33,4 +31,7 @@ export class RegisterDto {
     @IsString({ message: 'Google ID must be a string' })
     @IsOptional()
     googleId?: string;
+
+    @ApiProperty({ example: '2024-09-02T23:55:19.354Z', description: 'Timestamp when the user was created' })
+    createdAt: Date;
 }

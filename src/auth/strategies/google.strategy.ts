@@ -37,6 +37,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
                     id: user.id,
                     email: user.email,
                     name: user.name,
+                    createdAt: user.createdAt,
                     googleId: user.googleId,
                 },
             });
