@@ -32,7 +32,7 @@ export class CustomerDto {
 
     @ApiProperty({ example: 'Acme Inc.' })
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     companyName: string;
 
     @ApiProperty({ example: 'john.doe@example.com' })
